@@ -3,7 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Fresca - Fresh Recipes That Inspire</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
-  <body></body>
+  <body>
+    <%- include('./partials/_navbar.ejs') %>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>
+            Discover <span class="highlight">Fresh Recipes</span> That Inspire
+          </h1>
+          <p>
+            Fresca brings you simple, delicious, and easy-to-follow recipes.
+          </p>
+          <p>Cook, share, and enjoy meals with friends and family!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+      <div class="container">
+        <h2>
+          Become a true <span class="highlight">chef</span><br />with our
+          recipes
+        </h2>
+        <a href="/about" class="about-btn">About Fresca</a>
+
+        <div class="feature-cards">
+          <div class="feature-card blueberries">
+            <h3>Fresh Ingredients</h3>
+          </div>
+          <div class="feature-card cooking">
+            <h3>Cooking has never been this easy!</h3>
+          </div>
+          <div class="feature-card cookies">
+            <h3>Sweet Treats</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Recipes Section -->
+    <section class="recipes">
+      <div class="container">
+        <div class="recipes-header">
+          <h2>Recent Recipes</h2>
+          <a href="/recipes" class="browse-all">Browse All Recipes</a>
+        </div>
+
+        <div class="recipes-grid">
+          <% const recipes = [ { title: "Mini Donuts", author: "Maryam", date:
+          "Sep 12th, 2025", category: "Desserts" }, { title: "Mini Donuts",
+          author: "Maryam", date: "Sep 12th, 2025", category: "Desserts" }, {
+          title: "Mini Donuts", author: "Maryam", date: "Sep 12th, 2025",
+          category: "Desserts" }, { title: "Mini Donuts", author: "Maryam",
+          date: "Sep 12th, 2025", category: "Desserts" } ]; %> <%
+          recipes.forEach(recipe => { %>
+          <div class="recipe-card">
+            <div class="recipe-image"></div>
+            <div class="recipe-content">
+              <h3 class="recipe-title"><%= recipe.title %></h3>
+              <div class="recipe-meta">
+                <div>Added By <%= recipe.author %></div>
+                <div>Added On <%= recipe.date %></div>
+                <div>Category: <%= recipe.category %></div>
+              </div>
+              <a href="" class="view-recipe">View Recipe</a>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <a href="#top" class="back-to-top">↑</a>
+        <p>&copy; All rights reserved Fresca 2025</p>
+      </div>
+    </footer>
+  </body>
 </html>

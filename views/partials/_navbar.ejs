@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="/stylesheets/navbar.css" />
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <a href="/">
+        <img src="/images/fresca-logo.png" alt="Fresca" class="logo-img" />
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a
+          href="/"
+          class="nav-link <%= typeof page !== 'undefined' && page === 'home' ? 'active' : '' %>"
+          >Home</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          href="/about"
+          class="nav-link <%= typeof page !== 'undefined' && page === 'about' ? 'active' : '' %>"
+          >About Us</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          href="/recipes"
+          class="nav-link <%= typeof page !== 'undefined' && page === 'recipes' ? 'active' : '' %>"
+          >Recipes</a
+        >
+      </li>
+    </ul>
+
+    <div class="nav-auth">
+      <% if (typeof user !== 'undefined' && user) { %>
+      <!-- User is logged in - show user menu or logout -->
+      <span class="welcome-user"
+        >Welcome, <%= user.username || user.email %>!</span
+      >
+      <a href="/auth/sign-out" class="signup-btn">Logout</a>
+      <% } else { %>
+      <!-- User is NOT logged in - show sign up/sign in -->
+      <a href="/auth/sign-up" class="signup-btn">Sign Up</a>
+      <a href="/auth/sign-in" class="signup-btn">Sign In</a>
+      <% } %>
+    </div>
+
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener("DOMContentLoaded", function () {
+      const hamburger = document.querySelector(".hamburger");
+      const navMenu = document.querySelector(".nav-menu");
+
+      hamburger.addEventListener("click", function () {
+        hamburger.classList.toggle("active");
+        navMenu.classList.toggle("active");
+      });
+
+      // Close mobile menu when clicking on a link
+      document.querySelectorAll(".nav-link").forEach((n) =>
+        n.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navMenu.classList.remove("active");
+        })
+      );
+    });
+  </script>
+</nav>

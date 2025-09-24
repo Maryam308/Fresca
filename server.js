@@ -1,41 +1,76 @@
 const dotenv = require("dotenv");
+
 dotenv.config();
+require("./config/database.js");
 const express = require("express");
+const path = require("path");
 const app = express();
-const mongoose = require("mongoose");
+
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const isSignedIn = require("./middleware/is-signed-in.js");
+const passUserToView = require("./middleware/pass-user-to-view.js");
 
+// Controllers
 const authController = require("./controllers/auth.js");
 
-const port = process.env.PORT ? process.env.PORT : "3000";
+// Set the port from environment variable or default to 3000
+const PORT = process.env.PORT ? process.env.PORT : "3000";
 
-mongoose.connect(process.env.MONGODB_URI);
-
-mongoose.connection.on("connected", () => {
-  console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
-});
-
+// MIDDLEWARE
+// Middleware to parse URL-encoded data from forms
 app.use(express.urlencoded({ extended: false }));
+// Middleware for using HTTP verbs such as PUT or DELETE
 app.use(methodOverride("_method"));
-// app.use(morgan('dev'));
+// Morgan for logging HTTP requests
+app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname, "public")));
+
+// Session Storage with MongoStore
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
   })
 );
 
+// Add user variable to all templates
+app.use(passUserToView);
+
+// PUBLIC ROUTES
 app.get("/", (req, res) => {
   res.render("index.ejs", {
     user: req.session.user,
+    page: "home", // Add page identifier for nav active states
+  });
+});
+
+// FIXED: Pass user data to about page
+app.get("/about", (req, res) => {
+  res.render("about.ejs", {
+    user: req.session.user, // Add this line!
+    page: "about", // Add page identifier for nav active states
+  });
+});
+
+// Add recipes route if you have it
+app.get("/recipes", (req, res) => {
+  res.render("recipes.ejs", {
+    user: req.session.user,
+    page: "recipes",
   });
 });
 
 app.use("/auth", authController);
 
-app.listen(port, () => {
-  console.log(`The express app is ready on port ${port}!`);
+// PROTECTED ROUTES (if needed)
+
+app.listen(PORT, () => {
+  console.log(`The express app is ready on port ${PORT}!`);
 });

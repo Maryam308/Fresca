@@ -3,7 +3,143 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add a New Recipe</title>
+    <title>Add New Recipe</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      textarea {
+        resize: vertical;
+      }
+      .ingredients-list,
+      .steps-list {
+        list-style: none;
+        padding: 0;
+      }
+      .ingredients-list li,
+      .steps-list li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      .ingredients-list input,
+      .steps-list input {
+        flex-grow: 1;
+        margin-right: 10px;
+      }
+      .btn-remove,
+      .btn-add {
+        cursor: pointer;
+      }
+      .btn-submit {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <h1>Add a New Recipe</h1>
+    <form action="/recipes" method="POST">
+      <div class="form-group">
+        <label for="title">Recipe Title</label>
+        <input type="text" id="title" name="title" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cuisineId">Cuisine</label>
+        <select id="cuisineId" name="cuisineId">
+          <option value="">-- Select Cuisine --</option>
+          <% cuisines.forEach(cuisine => { %>
+          <option value="<%= cuisine._id %>"><%= cuisine.cuisineName %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Ingredients</label>
+        <div id="ingredients-container">
+          <input
+            type="text"
+            name="ingredients[]"
+            placeholder="e.g., 1 cup of flour"
+            required
+          />
+        </div>
+        <button type="button" class="btn-add" onclick="addInput('ingredients')">
+          Add another ingredient
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label>Steps</label>
+        <div id="steps-container">
+          <textarea
+            name="steps[]"
+            placeholder="Describe the first step"
+            required
+          ></textarea>
+        </div>
+        <button type="button" class="btn-add" onclick="addInput('steps')">
+          Add another step
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="recipeImage">Image URL</label>
+        <input type="text" id="recipeImage" name="recipeImage" required />
+      </div>
+
+      <div class="form-group">
+        <label for="prepTime">Preparation Time (minutes)</label>
+        <input type="number" id="prepTime" name="prepTime" min="0" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cookTime">Cook Time (minutes)</label>
+        <input type="number" id="cookTime" name="cookTime" min="0" required />
+      </div>
+
+      <button type="submit" class="btn-submit">Add Recipe</button>
+    </form>
+
+    <script>
+      function addInput(type) {
+        const container = document.getElementById(type + "-container");
+        if (type === "ingredients") {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.name = "ingredients[]";
+          input.placeholder = "e.g., 1 cup of flour";
+          input.required = true;
+          container.appendChild(input);
+        } else if (type === "steps") {
+          const textarea = document.createElement("textarea");
+          textarea.name = "steps[]";
+          textarea.placeholder = "Describe the next step";
+          textarea.required = true;
+          container.appendChild(textarea);
+        }
+      }
+    </script>
+  </body>
 </html>

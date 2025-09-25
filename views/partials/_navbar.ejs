@@ -28,14 +28,37 @@
           >Recipes</a
         >
       </li>
+      <% if (typeof user !== 'undefined' && user) { %>
+      <li class="nav-item">
+        <a
+          href="/recipes/new"
+          class="nav-link <%= typeof page !== 'undefined' && page === 'new' ? 'active' : '' %>"
+          >New Recipe</a
+        >
+      </li>
+      <% } %>
+
+      <!-- Admin-only Cuisine link -->
+      <% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
+      <li class="nav-item">
+        <a
+          href="/recipes/admin/cuisines"
+          class="nav-link <%= typeof page !== 'undefined' && page === 'cuisines' ? 'active' : '' %>"
+          >Manage Cuisines</a
+        >
+      </li>
+      <% } %>
     </ul>
 
     <div class="nav-auth">
       <% if (typeof user !== 'undefined' && user) { %>
       <!-- User is logged in - show user menu or logout -->
       <span class="welcome-user"
-        >Welcome, <%= user.username || user.email %>!</span
-      >
+        >Welcome, <%= user.username || user.email %>! <% if (user.role ===
+        'admin') { %>
+        <span class="admin-badge">(Admin)</span>
+        <% } %>
+      </span>
       <a href="/auth/sign-out" class="signup-btn">Logout</a>
       <% } else { %>
       <!-- User is NOT logged in - show sign up/sign in -->
@@ -62,7 +85,6 @@
         navMenu.classList.toggle("active");
       });
 
-      // Close mobile menu when clicking on a link
       document.querySelectorAll(".nav-link").forEach((n) =>
         n.addEventListener("click", () => {
           hamburger.classList.remove("active");

@@ -14,55 +14,69 @@ router.get("/sign-in", (req, res) => {
 });
 
 router.post("/sign-up", async (req, res) => {
-  const userInDatabase = await User.findOne({ username: req.body.username });
+  try {
+    const userInDatabase = await User.findOne({ username: req.body.username });
 
-  if (userInDatabase) {
-    return res.send("Username or Password is invalid");
+    if (userInDatabase) {
+      return res.send("Username or Password is invalid");
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+      return res.send("Password and Confirm Password must match");
+    }
+
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+    req.body.password = hashedPassword;
+
+    const newUser = await User.create(req.body);
+
+    req.session.user = {
+      username: newUser.username,
+      _id: newUser._id,
+      email: newUser.email,
+      role: newUser.role,
+    };
+
+    req.session.save(() => {
+      res.redirect("/");
+    });
+  } catch (error) {
+    console.log(`Error during sign-up: ${error}`);
+    res.send("An error occurred during registration. Please try again.");
   }
-
-  if (req.body.password !== req.body.confirmPassword) {
-    return res.send("Password and Confirm Password must match");
-  }
-
-  const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-  req.body.password = hashedPassword;
-
-  const newUser = await User.create(req.body);
-
-  req.session.user = {
-    username: newUser.username,
-    _id: newUser._id,
-  };
-
-  req.session.save(() => {
-    res.redirect("/");
-  });
 });
 
 router.post("/sign-in", async (req, res) => {
-  const userInDatabase = await User.findOne({ username: req.body.username });
+  try {
+    const userInDatabase = await User.findOne({ username: req.body.username });
 
-  if (!userInDatabase) {
-    return res.send("Username or Password is invalid");
+    if (!userInDatabase) {
+      return res.send("Username or Password is invalid");
+    }
+
+    const validPassword = bcrypt.compareSync(
+      req.body.password,
+      userInDatabase.password
+    );
+
+    if (!validPassword) {
+      return res.send("Username or Password is invalid");
+    }
+
+    req.session.user = {
+      username: userInDatabase.username,
+      _id: userInDatabase._id,
+      email: userInDatabase.email,
+      role: userInDatabase.role,
+    };
+
+    req.session.save(() => {
+      res.redirect("/");
+    });
+  } catch (error) {
+    console.log(`Error during sign-in: ${error}`);
+    res.send("An error occurred during login. Please try again.");
   }
-
-  const validPassword = bcrypt.compareSync(
-    req.body.password,
-    userInDatabase.password
-  );
-
-  if (!validPassword) {
-    return res.send("Username or Password is invalid");
-  }
-
-  req.session.user = {
-    username: userInDatabase.username,
-    _id: userInDatabase._id,
-  };
-
-  req.session.save(() => {
-    res.redirect("/");
-  });
 });
 
 router.get("/sign-out", (req, res) => {

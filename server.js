@@ -12,8 +12,10 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const isSignedIn = require("./middleware/is-signed-in.js");
 const passUserToView = require("./middleware/pass-user-to-view.js");
-const { Recipe, Cuisine } = require("./models/recipe");
+const Recipe = require("./models/recipe");
+const Cuisine = require("./models/cuisine");
 const recipesController = require("./controllers/recipes");
+const cuisineController = require("./controllers/cuisines.js");
 // Controllers
 const authController = require("./controllers/auth.js");
 
@@ -29,6 +31,7 @@ app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/recipes", recipesController);
+
 // Session Storage with MongoStore
 app.use(
   session({
@@ -40,27 +43,24 @@ app.use(
     }),
   })
 );
-
-// Add user variable to all templates
+app.use("/cuisines", cuisineController);
 app.use(passUserToView);
 
 // PUBLIC ROUTES
 app.get("/", (req, res) => {
   res.render("index.ejs", {
     user: req.session.user,
-    page: "home", // Add page identifier for nav active states
+    page: "home",
   });
 });
 
-// FIXED: Pass user data to about page
 app.get("/about", (req, res) => {
   res.render("about.ejs", {
-    user: req.session.user, // Add this line!
-    page: "about", // Add page identifier for nav active states
+    user: req.session.user,
+    page: "about",
   });
 });
 
-// Add recipes route if you have it
 app.get("/recipes", (req, res) => {
   res.render("recipes.ejs", {
     user: req.session.user,

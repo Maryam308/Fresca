@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Cuisines - Fresca</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/cuisine.css" />
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <div class="cuisines-container">
+      <div class="page-header">
+        <h1>Manage Cuisines</h1>
+        <button class="add-btn" onclick="openAddModal()">
+          + Add New Cuisine
+        </button>
+      </div>
+
+      <% if (cuisines && cuisines.length > 0) { %>
+      <div class="cuisines-grid">
+        <% cuisines.forEach(cuisine => { %>
+        <div class="cuisine-card">
+          <div class="cuisine-name"><%= cuisine.cuisineName %></div>
+          <div class="cuisine-actions">
+            <button
+              class="edit-btn"
+              onclick="openEditModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
+            >
+              Edit
+            </button>
+            <button
+              class="delete-btn"
+              onclick="openDeleteModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } else { %>
+      <div class="no-cuisines">
+        <h2>No Cuisines Found</h2>
+        <p>
+          You haven't added any cuisines yet. Click the "Add New Cuisine" button
+          above to get started!
+        </p>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="cuisineModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Add New Cuisine</h2>
+        <form id="cuisineForm">
+          <div class="form-group">
+            <label for="cuisineName">Cuisine Name</label>
+            <input
+              type="text"
+              id="cuisineName"
+              name="cuisineName"
+              required
+              placeholder="e.g., Italian, Chinese, Mexican"
+            />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="closeModal()">
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary" id="submitBtn">
+              Add Cuisine
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <div class="delete-modal-content">
+          <h2>Confirm Deletion</h2>
+          <p>
+            Are you sure you want to delete the cuisine
+            <span id="deleteItemName" class="cuisine-highlight"></span>?
+          </p>
+          <p>This action cannot be undone.</p>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeDeleteModal()"
+            >
+              Cancel
+            </button>
+            <button type="button" class="btn-danger" id="confirmDeleteBtn">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentCuisineId = null;
+      let isEditMode = false;
+
+      // Add Modal Functions
+      function openAddModal() {
+        document.getElementById("modalTitle").textContent = "Add New Cuisine";
+        document.getElementById("submitBtn").textContent = "Add Cuisine";
+        document.getElementById("cuisineName").value = "";
+        isEditMode = false;
+        currentCuisineId = null;
+        document.getElementById("cuisineModal").style.display = "block";
+        document.getElementById("cuisineName").focus();
+      }
+
+      function openEditModal(id, name) {
+        document.getElementById("modalTitle").textContent = "Edit Cuisine";
+        document.getElementById("submitBtn").textContent = "Update Cuisine";
+        document.getElementById("cuisineName").value = name;
+        isEditMode = true;
+        currentCuisineId = id;
+        document.getElementById("cuisineModal").style.display = "block";
+        document.getElementById("cuisineName").focus();
+        document.getElementById("cuisineName").select();
+      }
+
+      function closeModal() {
+        document.getElementById("cuisineModal").style.display = "none";
+        currentCuisineId = null;
+        isEditMode = false;
+      }
+
+      // Delete Modal Functions
+      function openDeleteModal(id, name) {
+        document.getElementById("deleteItemName").textContent = name;
+        currentCuisineId = id;
+        document.getElementById("deleteModal").style.display = "block";
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+        currentCuisineId = null;
+      }
+
+      // Form Submission
+      document
+        .getElementById("cuisineForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const cuisineName = document
+            .getElementById("cuisineName")
+            .value.trim();
+          if (!cuisineName) {
+            alert("Please enter a cuisine name");
+            return;
+          }
+
+          const submitBtn = document.getElementById("submitBtn");
+          const originalText = submitBtn.textContent;
+          submitBtn.disabled = true;
+          submitBtn.textContent = isEditMode ? "Updating..." : "Adding...";
+
+          try {
+            let url = "/cuisines";
+            let method = "POST";
+            let body = `cuisineName=${encodeURIComponent(cuisineName)}`;
+
+            if (isEditMode) {
+              url = `/cuisines/${currentCuisineId}?_method=PUT`;
+              body += `&_method=PUT`;
+            }
+
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: body,
+            });
+
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              throw new Error("Failed to save cuisine");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        });
+
+      // Delete Confirmation
+      document
+        .getElementById("confirmDeleteBtn")
+        .addEventListener("click", async function () {
+          if (!currentCuisineId) return;
+
+          const deleteBtn = this;
+          const originalText = deleteBtn.textContent;
+          deleteBtn.disabled = true;
+          deleteBtn.textContent = "Deleting...";
+
+          try {
+            const response = await fetch(
+              `/cuisines/${currentCuisineId}?_method=DELETE`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "_method=DELETE",
+              }
+            );
+
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              throw new Error("Failed to delete cuisine");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          } finally {
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = originalText;
+          }
+        });
+
+      // Close modals when clicking outside
+      window.addEventListener("click", function (event) {
+        const cuisineModal = document.getElementById("cuisineModal");
+        const deleteModal = document.getElementById("deleteModal");
+
+        if (event.target === cuisineModal) {
+          closeModal();
+        }
+        if (event.target === deleteModal) {
+          closeDeleteModal();
+        }
+      });
+
+      // Close modals with Escape key
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeModal();
+          closeDeleteModal();
+        }
+      });
+    </script>
+  </body>
+</html>

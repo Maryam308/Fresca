@@ -24,14 +24,13 @@ const PORT = process.env.PORT ? process.env.PORT : "3000";
 
 // MIDDLEWARE
 // Middleware to parse URL-encoded data from forms
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+
 // Middleware for using HTTP verbs such as PUT or DELETE
 app.use(methodOverride("_method"));
 // Morgan for logging HTTP requests
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/recipes", recipesController);
-
 // Session Storage with MongoStore
 app.use(
   session({
@@ -43,8 +42,10 @@ app.use(
     }),
   })
 );
-app.use("/cuisines", cuisineController);
 app.use(passUserToView);
+app.use("/auth", authController);
+app.use("/recipes", recipesController);
+app.use("/cuisines", cuisineController);
 
 // PUBLIC ROUTES
 app.get("/", (req, res) => {
@@ -67,8 +68,6 @@ app.get("/recipes", (req, res) => {
     page: "recipes",
   });
 });
-
-app.use("/auth", authController);
 
 // PROTECTED ROUTES (if needed)
 

@@ -20,7 +20,8 @@
       input[type="text"],
       input[type="number"],
       textarea,
-      select {
+      select,
+      input[type="file"] {
         width: 100%;
         padding: 8px;
         box-sizing: border-box;
@@ -28,24 +29,8 @@
       textarea {
         resize: vertical;
       }
-      .ingredients-list,
-      .steps-list {
-        list-style: none;
-        padding: 0;
-      }
-      .ingredients-list li,
-      .steps-list li {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-      }
-      .ingredients-list input,
-      .steps-list input {
-        flex-grow: 1;
-        margin-right: 10px;
-      }
-      .btn-remove,
-      .btn-add {
+      .btn-add,
+      .btn-submit {
         cursor: pointer;
       }
       .btn-submit {
@@ -53,28 +38,35 @@
         background-color: #4caf50;
         color: white;
         border: none;
-        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <h1>Add a New Recipe</h1>
-    <form action="/recipes" method="POST">
+
+    <% if (message) { %>
+    <p style="color: red"><%= message %></p>
+    <% } %>
+
+    <form action="/recipes" method="POST" enctype="multipart/form-data">
+      <!-- Recipe Title -->
       <div class="form-group">
         <label for="title">Recipe Title</label>
         <input type="text" id="title" name="title" required />
       </div>
 
+      <!-- Cuisine -->
       <div class="form-group">
         <label for="cuisineId">Cuisine</label>
         <select id="cuisineId" name="cuisineId">
           <option value="">-- Select Cuisine --</option>
-          <% cuisines.forEach(cuisine => { %>
+          <% if (cuisines) { %> <% cuisines.forEach(cuisine => { %>
           <option value="<%= cuisine._id %>"><%= cuisine.cuisineName %></option>
-          <% }); %>
+          <% }) %> <% } %>
         </select>
       </div>
 
+      <!-- Ingredients -->
       <div class="form-group">
         <label>Ingredients</label>
         <div id="ingredients-container">
@@ -90,6 +82,7 @@
         </button>
       </div>
 
+      <!-- Steps -->
       <div class="form-group">
         <label>Steps</label>
         <div id="steps-container">
@@ -104,16 +97,25 @@
         </button>
       </div>
 
+      <!-- Recipe Image -->
       <div class="form-group">
-        <label for="recipeImage">Image URL</label>
-        <input type="text" id="recipeImage" name="recipeImage" required />
+        <label for="recipeImage">Recipe Image</label>
+        <input
+          type="file"
+          id="recipeImage"
+          name="recipeImage"
+          accept="image/*"
+          required
+        />
       </div>
 
+      <!-- Prep Time -->
       <div class="form-group">
         <label for="prepTime">Preparation Time (minutes)</label>
         <input type="number" id="prepTime" name="prepTime" min="0" required />
       </div>
 
+      <!-- Cook Time -->
       <div class="form-group">
         <label for="cookTime">Cook Time (minutes)</label>
         <input type="number" id="cookTime" name="cookTime" min="0" required />

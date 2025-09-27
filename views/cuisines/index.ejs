@@ -5,50 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Cuisines - Fresca</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/cuisine.css" />
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-
-    <div class="cuisines-container">
-      <div class="page-header">
-        <h1>Manage Cuisines</h1>
-        <button class="add-btn" onclick="openAddModal()">
-          + Add New Cuisine
-        </button>
-      </div>
-
-      <% if (cuisines && cuisines.length > 0) { %>
-      <div class="cuisines-grid">
-        <% cuisines.forEach(cuisine => { %>
-        <div class="cuisine-card">
-          <div class="cuisine-name"><%= cuisine.cuisineName %></div>
-          <div class="cuisine-actions">
-            <button
-              class="edit-btn"
-              onclick="openEditModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
-            >
-              Edit
-            </button>
-            <button
-              class="delete-btn"
-              onclick="openDeleteModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
-            >
-              Delete
-            </button>
-          </div>
+        <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+         <h1>Manage <span class="highlight">Cuisines</span></h1>
+          <p>Add, edit, and organize your recipe categories</p>
+          <button class="add-btn" onclick="openAddModal()">
+            + Add New Cuisine
+          </button>
         </div>
-        <% }) %>
       </div>
-      <% } else { %>
-      <div class="no-cuisines">
-        <h2>No Cuisines Found</h2>
-        <p>
-          You haven't added any cuisines yet. Click the "Add New Cuisine" button
-          above to get started!
-        </p>
+    </section>
+
+
+
+      <div class="container">
+        <% if (cuisines && cuisines.length > 0) { %>
+        <div class="cuisines-grid">
+          <% cuisines.forEach(cuisine => { %>
+          <div class="cuisine-card">
+            <div class="cuisine-name"><%= cuisine.cuisineName %></div>
+            <div class="cuisine-actions">
+              <button
+                class="edit-btn"
+                onclick="openEditModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
+              >
+                Edit
+              </button>
+              <button
+                class="delete-btn"
+                onclick="openDeleteModal('<%= cuisine._id %>', '<%= cuisine.cuisineName %>')"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <% } else { %>
+        <div class="no-cuisines">
+          <h2>No Cuisines Found</h2>
+          <p>
+            You haven't added any cuisines yet. Click the "Add New Cuisine"
+            button above to get started and organize your recipes by category!
+          </p>
+        </div>
+        <% } %>
       </div>
-      <% } %>
     </div>
 
     <!-- Add/Edit Modal -->
@@ -89,7 +96,7 @@
             Are you sure you want to delete the cuisine
             <span id="deleteItemName" class="cuisine-highlight"></span>?
           </p>
-          <p>This action cannot be undone.</p>
+          <p>This action cannot be undone and may affect existing recipes.</p>
           <div class="modal-actions">
             <button
               type="button"
@@ -99,12 +106,20 @@
               Cancel
             </button>
             <button type="button" class="btn-danger" id="confirmDeleteBtn">
-              Delete
+              Delete Cuisine
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <a href="#top" class="back-to-top">↑</a>
+        <p>&copy; All rights reserved Fresca 2025</p>
+      </div>
+    </footer>
 
     <script>
       let currentCuisineId = null;
@@ -256,6 +271,17 @@
           closeDeleteModal();
         }
       });
+
+      // Smooth scroll for back to top
+      document
+        .querySelector(".back-to-top")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
     </script>
   </body>
 </html>

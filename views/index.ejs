@@ -68,7 +68,7 @@
           <% if (recentRecipes && recentRecipes.length > 0) { %>
             <% recentRecipes.forEach(recipe => { %>
 <div class="recipe-card">
-  <div class="recipe-image" data-bg-image="<%= recipe.recipeImage || '/images/default-recipe.jpg' %>"></div>
+<div class="recipe-image" style="background-image: url('<%= recipe.recipeImage || "/images/default-recipe.jpg" %>');"></div>
   <div class="recipe-content">
                   <h3 class="recipe-title"><%= recipe.title %></h3>
                   <div class="recipe-meta">

@@ -414,83 +414,13 @@ nav .container {
 }
 
 .recipe-image {
+  object-fit: cover;
+  display: block;
   width: 100%;
-  height: 200px;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="50" cy="50" r="15" fill="%23d4691a"/><circle cx="150" cy="60" r="20" fill="%238b4513"/><circle cx="100" cy="120" r="18" fill="%23cd853f"/><circle cx="40" cy="160" r="12" fill="%23daa520"/><circle cx="160" cy="140" r="16" fill="%23b8860b"/></svg>')
-    #f5f5f5;
-  background-size: cover;
+  height: 230px;
   background-position: center;
-  position: relative;
-}
-
-/* Recipe Image Placeholders */
-.recipe-image.donuts {
-  background: linear-gradient(135deg, #8b4513, #d4691a);
-  background-image: radial-gradient(
-      circle at 30% 40%,
-      #d4691a 20%,
-      transparent 21%
-    ),
-    radial-gradient(circle at 70% 60%, #8b4513 15%, transparent 16%);
-}
-
-.recipe-image.pancake {
-  background: linear-gradient(135deg, #daa520, #f4e4bc);
-  background-image: radial-gradient(
-    circle at 50% 50%,
-    #f4e4bc 30%,
-    transparent 31%
-  );
-}
-
-.recipe-image.pizza {
-  background: linear-gradient(135deg, #dc143c, #ff6347);
-  background-image: radial-gradient(
-      circle at 30% 30%,
-      #ff6347 10%,
-      transparent 11%
-    ),
-    radial-gradient(circle at 70% 70%, #dc143c 8%, transparent 9%);
-}
-
-.recipe-image.pudding {
-  background: linear-gradient(135deg, #ff69b4, #ffb6c1);
-  background-image: radial-gradient(
-    circle at 40% 60%,
-    #ffb6c1 20%,
-    transparent 21%
-  );
-}
-
-.recipe-image.cookies {
-  background: linear-gradient(135deg, #d2691e, #f4a460);
-  background-image: radial-gradient(
-      circle at 25% 25%,
-      #f4a460 15%,
-      transparent 16%
-    ),
-    radial-gradient(circle at 75% 75%, #d2691e 12%, transparent 13%);
-}
-
-.recipe-image.pasta {
-  background: linear-gradient(135deg, #ffd700, #fff8dc);
-  background-image: linear-gradient(45deg, #fff8dc 25%, transparent 25%),
-    linear-gradient(-45deg, #ffd700 25%, transparent 25%);
-  background-size: 20px 20px;
-}
-
-.recipe-image.burger {
-  background: linear-gradient(135deg, #8b4513, #d2691e);
-  background-image: linear-gradient(0deg, #d2691e 50%, #8b4513 50%);
-}
-
-.recipe-image.french-toast {
-  background: linear-gradient(135deg, #deb887, #f5deb3);
-  background-image: radial-gradient(
-    circle at 60% 40%,
-    #f5deb3 25%,
-    transparent 26%
-  );
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .recipe-content {

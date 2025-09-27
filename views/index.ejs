@@ -13,7 +13,7 @@
       <div class="container">
         <div class="hero-content">
           <h1>
-            Discover <span class="highlight">Fresh Recipes</span> That Inspire
+            Discover Fresh Recipes That Inspire
           </h1>
           <p>
             Fresca brings you simple, delicious, and easy-to-follow recipes.
@@ -67,9 +67,9 @@
         <div class="recipes-grid">
           <% if (recentRecipes && recentRecipes.length > 0) { %>
             <% recentRecipes.forEach(recipe => { %>
-              <div class="recipe-card">
-                <div class="recipe-image" style="background-image: url('<%= recipe.recipeImage || "/images/default-recipe.jpg" %>');"></div>
-                <div class="recipe-content">
+<div class="recipe-card">
+  <div class="recipe-image" data-bg-image="<%= recipe.recipeImage || '/images/default-recipe.jpg' %>"></div>
+  <div class="recipe-content">
                   <h3 class="recipe-title"><%= recipe.title %></h3>
                   <div class="recipe-meta">
                     <div>Added By <%= recipe.authorId ? recipe.authorId.username : 'Unknown' %></div>
@@ -78,6 +78,8 @@
                   </div>
                   <a href="/recipes/<%= recipe._id %>" class="view-recipe">View Recipe</a>
                 </div>
+</div>
+              
               </div>
             <% }) %>
           <% } else { %>

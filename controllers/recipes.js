@@ -6,11 +6,19 @@ const Cuisine = require("../models/cuisine");
 const multer = require("multer");
 const { storage } = require("../config/cloudinary.js");
 
-const parser = multer({ storage });
+const parser = multer({
+  storage,
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 
 // Route to render "Add New Recipe" form
 router.get("/new", async (req, res) => {
   try {
+    // Check authentication
+    if (!req.session.user) {
+      return res.redirect("/auth/sign-in");
+    }
+
     const cuisines = await Cuisine.find({});
     if (cuisines.length === 0) {
       return res.render("recipes/new.ejs", {
@@ -18,6 +26,7 @@ router.get("/new", async (req, res) => {
         message: "No cuisines available. Please add a cuisine first.",
       });
     }
+
     res.render("recipes/new.ejs", { cuisines, message: null });
   } catch (error) {
     console.log(`Error fetching cuisines: ${error}`);

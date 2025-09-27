@@ -125,10 +125,6 @@ nav .container {
   margin-bottom: 20px;
 }
 
-.hero h1 .highlight {
-  color: #ff6b6b;
-}
-
 .hero p {
   font-size: 1.2rem;
   margin-bottom: 15px;
@@ -794,6 +790,7 @@ nav .container {
 }
 
 .form-group input[type="number"] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 

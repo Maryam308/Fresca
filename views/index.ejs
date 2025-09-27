@@ -33,14 +33,24 @@
         <a href="/about" class="about-btn">About Fresca</a>
 
         <div class="feature-cards">
-          <div class="feature-card blueberries">
-            <h3>Fresh Ingredients</h3>
+          <div class="feature-card">
+            <img
+              width="100"
+              height="120"
+              src="/images/blueberryCake.png"
+              alt="Blueberry"
+            />
           </div>
-          <div class="feature-card cooking">
+          <div class="feature-card">
             <h3>Cooking has never been this easy!</h3>
           </div>
-          <div class="feature-card cookies">
-            <h3>Sweet Treats</h3>
+          <div class="feature-card">
+            <img
+              width="100"
+              height="120"
+              src="/images/cookies.jpg"
+              alt="Cookies"
+            />
           </div>
         </div>
       </div>
@@ -55,26 +65,26 @@
         </div>
 
         <div class="recipes-grid">
-          <% const recipes = [ { title: "Mini Donuts", author: "Maryam", date:
-          "Sep 12th, 2025", category: "Desserts" }, { title: "Mini Donuts",
-          author: "Maryam", date: "Sep 12th, 2025", category: "Desserts" }, {
-          title: "Mini Donuts", author: "Maryam", date: "Sep 12th, 2025",
-          category: "Desserts" }, { title: "Mini Donuts", author: "Maryam",
-          date: "Sep 12th, 2025", category: "Desserts" } ]; %> <%
-          recipes.forEach(recipe => { %>
-          <div class="recipe-card">
-            <div class="recipe-image"></div>
-            <div class="recipe-content">
-              <h3 class="recipe-title"><%= recipe.title %></h3>
-              <div class="recipe-meta">
-                <div>Added By <%= recipe.author %></div>
-                <div>Added On <%= recipe.date %></div>
-                <div>Category: <%= recipe.category %></div>
+          <% if (recentRecipes && recentRecipes.length > 0) { %>
+            <% recentRecipes.forEach(recipe => { %>
+              <div class="recipe-card">
+                <div class="recipe-image" style="background-image: url('<%= recipe.recipeImage || "/images/default-recipe.jpg" %>');"></div>
+                <div class="recipe-content">
+                  <h3 class="recipe-title"><%= recipe.title %></h3>
+                  <div class="recipe-meta">
+                    <div>Added By <%= recipe.authorId ? recipe.authorId.username : 'Unknown' %></div>
+                    <div>Added On <%= recipe.createdAt ? recipe.createdAt.toDateString() : 'Unknown' %></div>
+                    <div>Category: <%= recipe.cuisineId ? recipe.cuisineId.cuisineName : 'Uncategorized' %></div>
+                  </div>
+                  <a href="/recipes/<%= recipe._id %>" class="view-recipe">View Recipe</a>
+                </div>
               </div>
-              <a href="" class="view-recipe">View Recipe</a>
+            <% }) %>
+          <% } else { %>
+            <div class="no-recipes-message">
+              <p>No recipes available yet. <a href="/recipes/new">Add the first recipe!</a></p>
             </div>
-          </div>
-          <% }) %>
+          <% } %>
         </div>
       </div>
     </section>
@@ -86,5 +96,16 @@
         <p>&copy; All rights reserved Fresca 2025</p>
       </div>
     </footer>
+
+    <script>
+      // Smooth scroll for back to top
+      document.querySelector('.back-to-top').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    </script>
   </body>
 </html>

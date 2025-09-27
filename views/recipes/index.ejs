@@ -3,7 +3,210 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recipes HomePage</title>
+    <title>Recipes - Fresca</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
-  <body></body>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Let's Get Into Cooking</h1>
+          <a href="/recipes/new" class="add-recipe-btn">Add a new Recipe</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+      <div class="container">
+        <h2 class="filter-title">
+          What to <span class="highlight">Cook?</span>
+        </h2>
+
+        <div class="category-filters">
+          <button class="filter-btn active" data-category="all">
+            All Cuisines
+          </button>
+          <% if (cuisines && cuisines.length > 0) { %> <%
+          cuisines.forEach(cuisine => { %>
+          <button
+            class="filter-btn"
+            data-category="<%= cuisine.cuisineName.toLowerCase() %>"
+          >
+            <%= cuisine.cuisineName %>
+          </button>
+          <% }) %> <% } %>
+        </div>
+
+        <div class="recipe-toggle">
+          <button class="toggle-option active" data-type="all">
+            All Recipes
+          </button>
+          <% if (currentUser) { %>
+          <button class="toggle-option" data-type="my-recipes">
+            Added By Me
+          </button>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="recipes-section">
+      <div class="container">
+        <!-- No Recipes Message (initially hidden, shown by JavaScript when needed) -->
+        <div class="no-recipes-message hidden" id="no-recipes-message">
+          <p id="no-recipes-text">No recipes available.</p>
+        </div>
+
+        <div class="recipes-grid" id="recipes-grid">
+          <% if (recipes.length === 0) { %>
+          <div class="no-recipes-message">
+            <p>No recipes available.</p>
+          </div>
+          <% } else { %> <% recipes.forEach(recipe => { %>
+          <div
+            class="recipe-card"
+            data-category="<%= recipe.cuisineId ? recipe.cuisineId.cuisineName.toLowerCase() : 'uncategorized' %>"
+            data-author-id="<%= recipe.authorId ? recipe.authorId._id : '' %>"
+          >
+            <div
+              class="recipe-image"
+              data-image="<%= recipe.recipeImage || '/default-recipe.jpg' %>"
+            ></div>
+            <div class="recipe-content">
+              <h3 class="recipe-title"><%= recipe.title %></h3>
+              <div class="recipe-meta">
+                <div>
+                  Added By <%= recipe.authorId ? recipe.authorId.username :
+                  'Unknown' %>
+                </div>
+                <div>
+                  Added On <%= recipe.createdAt ?
+                  recipe.createdAt.toDateString() : 'Unknown' %>
+                </div>
+                <div>
+                  Cuisine: <%= recipe.cuisineId ? recipe.cuisineId.cuisineName :
+                  'Uncategorized' %>
+                </div>
+              </div>
+              <a href="/recipes/<%= recipe._id %>" class="view-recipe"
+                >View Recipe</a
+              >
+            </div>
+          </div>
+          <% }) %> <% } %>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <a href="#top" class="back-to-top">↑</a>
+        <p>&copy; All rights reserved Fresca 2025</p>
+      </div>
+    </footer>
+
+    <script>
+      // Pass current user ID to JavaScript
+      const currentUserId = '<%= currentUser ? currentUser._id : "" %>';
+
+      // Category Filter Functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterBtns = document.querySelectorAll(".filter-btn");
+        const toggleBtns = document.querySelectorAll(".toggle-option");
+        const recipeCards = document.querySelectorAll(".recipe-card");
+
+        // Set background images for recipe cards
+        document
+          .querySelectorAll(".recipe-image[data-image]")
+          .forEach((img) => {
+            const imageUrl = img.getAttribute("data-image");
+            img.style.backgroundImage = `url('${imageUrl}')`;
+          });
+
+        let currentCategoryFilter = "all";
+        let currentTypeFilter = "all";
+
+        function filterRecipes() {
+          let visibleCount = 0;
+
+          recipeCards.forEach((card) => {
+            const cardCategory = card.dataset.category;
+            const cardAuthorId = card.dataset.authorId;
+
+            // Check category filter
+            const categoryMatch =
+              currentCategoryFilter === "all" ||
+              cardCategory === currentCategoryFilter;
+
+            // Check type filter (all recipes vs my recipes)
+            const typeMatch =
+              currentTypeFilter === "all" ||
+              (currentTypeFilter === "my-recipes" &&
+                cardAuthorId === currentUserId);
+
+            // Show card only if both filters match
+            if (categoryMatch && typeMatch) {
+              card.classList.remove("hidden");
+              visibleCount++;
+            } else {
+              card.classList.add("hidden");
+            }
+          });
+
+          // Show/hide no recipes message based on visible count
+          const noRecipesMessage =
+            document.getElementById("no-recipes-message");
+          const noRecipesText = document.getElementById("no-recipes-text");
+
+          if (visibleCount === 0 && recipeCards.length > 0) {
+            noRecipesText.textContent = "No recipes available.";
+            noRecipesMessage.classList.remove("hidden");
+          } else {
+            noRecipesMessage.classList.add("hidden");
+          }
+        }
+
+        // Category filtering
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            // Remove active class from all buttons
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            // Add active class to clicked button
+            this.classList.add("active");
+
+            currentCategoryFilter = this.dataset.category;
+            filterRecipes();
+          });
+        });
+
+        // Recipe type toggle
+        toggleBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            toggleBtns.forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+
+            currentTypeFilter = this.dataset.type;
+            filterRecipes();
+          });
+        });
+
+        // Smooth scroll for back to top
+        document
+          .querySelector(".back-to-top")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+      });
+    </script>
+  </body>
 </html>

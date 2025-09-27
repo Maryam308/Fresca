@@ -3,7 +3,7 @@
   <div class="nav-container">
     <div class="nav-logo">
       <a href="/">
-        <img src="/images/fresca-logo.png" alt="Fresca" class="logo-img" />
+        <img src="/images/logo.png" alt="Fresca" class="logo-img" />
       </a>
     </div>
     <ul class="nav-menu">
@@ -25,18 +25,10 @@
         <a
           href="/recipes"
           class="nav-link <%= typeof page !== 'undefined' && page === 'recipes' ? 'active' : '' %>"
-          >Recipes</a
         >
+          <%= user && user.role === 'admin' ? 'Manage Recipes' : 'Recipes' %>
+        </a>
       </li>
-      <% if (typeof user !== 'undefined' && user) { %>
-      <li class="nav-item">
-        <a
-          href="/recipes/new"
-          class="nav-link <%= typeof page !== 'undefined' && page === 'new' ? 'active' : '' %>"
-          >New Recipe</a
-        >
-      </li>
-      <% } %>
 
       <!-- Admin-only Cuisine link -->
       <% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>

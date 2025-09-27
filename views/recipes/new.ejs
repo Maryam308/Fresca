@@ -3,145 +3,217 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add New Recipe</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 20px;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
-      input[type="text"],
-      input[type="number"],
-      textarea,
-      select,
-      input[type="file"] {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-      }
-      textarea {
-        resize: vertical;
-      }
-      .btn-add,
-      .btn-submit {
-        cursor: pointer;
-      }
-      .btn-submit {
-        padding: 10px 20px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-      }
-    </style>
+    <title>Add New Recipe - Fresca</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
-    <h1>Add a New Recipe</h1>
+    <%- include('../partials/_navbar.ejs') %>
 
-    <% if (message) { %>
-    <p style="color: red"><%= message %></p>
-    <% } %>
-
-    <form action="/recipes" method="POST" enctype="multipart/form-data">
-      <!-- Recipe Title -->
-      <div class="form-group">
-        <label for="title">Recipe Title</label>
-        <input type="text" id="title" name="title" required />
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1>Add a New Recipe</h1>
+        <p>Share your culinary creativity with the Fresca community</p>
       </div>
+    </section>
 
-      <!-- Cuisine -->
-      <div class="form-group">
-        <label for="cuisineId">Cuisine</label>
-        <select id="cuisineId" name="cuisineId">
-          <option value="">-- Select Cuisine --</option>
-          <% if (cuisines) { %> <% cuisines.forEach(cuisine => { %>
-          <option value="<%= cuisine._id %>"><%= cuisine.cuisineName %></option>
-          <% }) %> <% } %>
-        </select>
+    <!-- Form Container -->
+    <div class="container">
+      <div class="form-container">
+        <% if (message) { %>
+        <div class="error-message"><%= message %></div>
+        <% } %>
+
+        <form action="/recipes" method="POST" enctype="multipart/form-data">
+          <!-- Recipe Title -->
+          <div class="form-group">
+            <label for="title">Recipe Title *</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Enter a delicious recipe name"
+              required
+            />
+          </div>
+
+          <!-- Cuisine Selection -->
+          <div class="form-group">
+            <label for="cuisineId">Cuisine Category</label>
+            <select id="cuisineId" name="cuisineId">
+              <option value="">-- Select Cuisine Type --</option>
+              <% if (cuisines && cuisines.length > 0) { %> <%
+              cuisines.forEach(cuisine => { %>
+              <option value="<%= cuisine._id %>">
+                <%= cuisine.cuisineName %>
+              </option>
+              <% }) %> <% } %>
+            </select>
+          </div>
+
+          <!-- Recipe Image -->
+          <div class="form-group">
+            <label for="recipeImage">Recipe Image *</label>
+            <input
+              type="file"
+              id="recipeImage"
+              name="recipeImage"
+              accept="image/*"
+              required
+            />
+          </div>
+
+          <!-- Prep and Cook Time Grid -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prepTime">Prep Time (minutes) *</label>
+              <input
+                type="number"
+                id="prepTime"
+                name="prepTime"
+                min="0"
+                placeholder="15"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cookTime">Cook Time (minutes) *</label>
+              <input
+                type="number"
+                id="cookTime"
+                name="cookTime"
+                min="0"
+                placeholder="30"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Ingredients Section -->
+          <div class="form-group">
+            <label>Ingredients *</label>
+            <div id="ingredients-container" class="ingredients-container">
+              <input
+                type="text"
+                name="ingredients[]"
+                placeholder="e.g., 1 cup all-purpose flour"
+                required
+              />
+            </div>
+            <button
+              type="button"
+              class="btn-add"
+              onclick="addInput('ingredients')"
+            >
+              Add another ingredient
+            </button>
+          </div>
+
+          <!-- Steps Section -->
+          <div class="form-group">
+            <label>Cooking Steps *</label>
+            <div id="steps-container" class="steps-container">
+              <textarea
+                name="steps[]"
+                placeholder="Describe the first step in detail..."
+                required
+              ></textarea>
+            </div>
+            <button type="button" class="btn-add" onclick="addInput('steps')">
+              Add another step
+            </button>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <a href="/recipes" class="btn-secondary">← Back to Recipes</a>
+            <button type="submit" class="btn-submit">
+              Add Recipe to Collection
+            </button>
+          </div>
+        </form>
       </div>
+    </div>
 
-      <!-- Ingredients -->
-      <div class="form-group">
-        <label>Ingredients</label>
-        <div id="ingredients-container">
-          <input
-            type="text"
-            name="ingredients[]"
-            placeholder="e.g., 1 cup of flour"
-            required
-          />
-        </div>
-        <button type="button" class="btn-add" onclick="addInput('ingredients')">
-          Add another ingredient
-        </button>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <a href="#top" class="back-to-top">↑</a>
+        <p>&copy; All rights reserved Fresca 2025</p>
       </div>
-
-      <!-- Steps -->
-      <div class="form-group">
-        <label>Steps</label>
-        <div id="steps-container">
-          <textarea
-            name="steps[]"
-            placeholder="Describe the first step"
-            required
-          ></textarea>
-        </div>
-        <button type="button" class="btn-add" onclick="addInput('steps')">
-          Add another step
-        </button>
-      </div>
-
-      <!-- Recipe Image -->
-      <div class="form-group">
-        <label for="recipeImage">Recipe Image</label>
-        <input
-          type="file"
-          id="recipeImage"
-          name="recipeImage"
-          accept="image/*"
-          required
-        />
-      </div>
-
-      <!-- Prep Time -->
-      <div class="form-group">
-        <label for="prepTime">Preparation Time (minutes)</label>
-        <input type="number" id="prepTime" name="prepTime" min="0" required />
-      </div>
-
-      <!-- Cook Time -->
-      <div class="form-group">
-        <label for="cookTime">Cook Time (minutes)</label>
-        <input type="number" id="cookTime" name="cookTime" min="0" required />
-      </div>
-
-      <button type="submit" class="btn-submit">Add Recipe</button>
-    </form>
+    </footer>
 
     <script>
       function addInput(type) {
         const container = document.getElementById(type + "-container");
+
         if (type === "ingredients") {
           const input = document.createElement("input");
           input.type = "text";
           input.name = "ingredients[]";
-          input.placeholder = "e.g., 1 cup of flour";
+          input.placeholder = "e.g., 2 tablespoons olive oil";
           input.required = true;
           container.appendChild(input);
         } else if (type === "steps") {
           const textarea = document.createElement("textarea");
           textarea.name = "steps[]";
-          textarea.placeholder = "Describe the next step";
+          textarea.placeholder = "Describe the next step in detail...";
           textarea.required = true;
           container.appendChild(textarea);
         }
+
+        // Add animation
+        const newElement = container.lastElementChild;
+        newElement.style.opacity = "0";
+        newElement.style.transform = "translateY(-10px)";
+
+        setTimeout(() => {
+          newElement.style.transition = "all 0.3s ease";
+          newElement.style.opacity = "1";
+          newElement.style.transform = "translateY(0)";
+        }, 10);
       }
+
+      // Smooth scroll for back to top
+      document
+        .querySelector(".back-to-top")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
+
+      // Form validation enhancements
+      document.querySelector("form").addEventListener("submit", function (e) {
+        const ingredients = document.querySelectorAll(
+          'input[name="ingredients[]"]'
+        );
+        const steps = document.querySelectorAll('textarea[name="steps[]"]');
+
+        if (ingredients.length === 0 || steps.length === 0) {
+          e.preventDefault();
+          alert("Please add at least one ingredient and one cooking step.");
+          return;
+        }
+
+        // Check if any ingredient or step is empty
+        let hasEmptyFields = false;
+        ingredients.forEach((input) => {
+          if (!input.value.trim()) hasEmptyFields = true;
+        });
+        steps.forEach((textarea) => {
+          if (!textarea.value.trim()) hasEmptyFields = true;
+        });
+
+        if (hasEmptyFields) {
+          e.preventDefault();
+          alert("Please fill in all ingredient and step fields.");
+          return;
+        }
+      });
     </script>
   </body>
 </html>

@@ -48,11 +48,29 @@ app.use("/recipes", recipesController);
 app.use("/cuisines", cuisineController);
 
 // PUBLIC ROUTES
-app.get("/", (req, res) => {
-  res.render("index.ejs", {
-    user: req.session.user,
-    page: "home",
-  });
+app.get("/", async (req, res) => {
+  try {
+    // Fetch 3 most recent recipes with populated author and cuisine data
+    const recentRecipes = await Recipe.find()
+      .populate("authorId", "username")
+      .populate("cuisineId", "cuisineName")
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    res.render("index.ejs", {
+      user: req.session.user,
+      page: "home",
+      recentRecipes: recentRecipes,
+    });
+  } catch (error) {
+    console.error("Error fetching recent recipes:", error);
+    // Fallback: render with empty recipes array if there's an error
+    res.render("index.ejs", {
+      user: req.session.user,
+      page: "home",
+      recentRecipes: [],
+    });
+  }
 });
 
 app.get("/about", (req, res) => {

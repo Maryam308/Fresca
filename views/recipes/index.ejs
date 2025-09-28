@@ -40,16 +40,16 @@
           <% }) %> <% } %>
         </div>
 
+        <% if (currentUser) { %>
         <div class="recipe-toggle">
           <button class="toggle-option active" data-type="all">
             All Recipes
           </button>
-          <% if (currentUser) { %>
           <button class="toggle-option" data-type="my-recipes">
             Added By Me
           </button>
-          <% } %>
         </div>
+        <% } %>
       </div>
     </section>
 

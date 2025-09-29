@@ -591,30 +591,32 @@ nav .container {
   gap: 0;
   position: relative;
 }
-
 .back-to-top {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
   width: 60px;
   height: 60px;
-  text-decoration: none;
+  background-color: #847778;
   color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+  text-decoration: none;
+  display: none; /* hidden by default, JS shows it */
+  z-index: 1000;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
-  font-size: 1.8rem;
-  font-weight: normal;
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 3px solid white;
 }
 
 .back-to-top:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-50%) translateY(-3px);
+  background-color: #645a5b;
+  transform: translateY(-3px);
 }
 
 .footer p {

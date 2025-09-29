@@ -6,6 +6,7 @@
     <title>Fresca - Fresh Recipes That Inspire</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script src="/scripts/script.js"></script>
+    
   </head>
   <body>
     <%- include('./partials/_navbar.ejs') %>
@@ -21,7 +22,6 @@
           </p>
           <p>Cook, share, and enjoy meals with friends and family!</p>
         </div>
-      </div>
     </section>
 
     <!-- About Section -->
@@ -57,43 +57,51 @@
       </div>
     </section>
 
-    <!-- Recent Recipes Section -->
-    <section class="recipes">
-      <div class="container">
-        <div class="recipes-header">
-          <h2>Recent Recipes</h2>
-          <a href="/recipes" class="browse-all">Browse All Recipes</a>
-        </div>
+<!-- Recent Recipes Section -->
+<section class="recipes-section">
+  <div class="container">
+    <div class="recipes-header">
+      <h2>Recent Recipes</h2>
+      <a href="/recipes" class="browse-all">Browse All Recipes</a>
+    </div>
 
-        <div class="recipes-grid">
-          <% if (recentRecipes && recentRecipes.length > 0) { %>
-            <% recentRecipes.forEach(recipe => { %>
-<div class="recipe-card">
-<% const imageUrl = recipe.recipeImage || "/images/default-recipe.jpg"; %>
-<div class="recipe-image" style="background-image: url('<%= imageUrl %>');"></div>
-
-
-  <div class="recipe-content">
-                  <h3 class="recipe-title"><%= recipe.title %></h3>
-                  <div class="recipe-meta">
-                    <div>Added By <%= recipe.authorId ? recipe.authorId.username : 'Unknown' %></div>
-                    <div>Added On <%= recipe.createdAt ? recipe.createdAt.toDateString() : 'Unknown' %></div>
-                    <div>Category: <%= recipe.cuisineId ? recipe.cuisineId.cuisineName : 'Uncategorized' %></div>
-                  </div>
-                  <a href="/recipes/<%= recipe._id %>" class="view-recipe">View Recipe</a>
+    <div class="recipes-grid" id="recent-recipes-grid">
+      <% if (recentRecipes && recentRecipes.length > 0) { %>
+        <% recentRecipes.forEach(recipe => { %>
+          <div
+            class="recipe-card"
+            data-category="<%= recipe.cuisineId ? recipe.cuisineId.cuisineName.toLowerCase() : 'uncategorized' %>"
+            data-author-id="<%= recipe.authorId ? recipe.authorId._id : '' %>"
+          >
+            <% const imageUrl = recipe.recipeImage || '/images/default-recipe.jpg'; %>
+            <div class="recipe-image" data-image="<%= imageUrl %>"></div>
+            
+            <div class="recipe-content">
+              <h3 class="recipe-title"><%= recipe.title %></h3>
+              <div class="recipe-meta">
+                <div>
+                  Added By <%= recipe.authorId ? recipe.authorId.username : 'Unknown' %>
                 </div>
-</div>
-              
+                <div>
+                  Added On <%= recipe.createdAt ? recipe.createdAt.toDateString() : 'Unknown' %>
+                </div>
+                <div>
+                  Cuisine: <%= recipe.cuisineId ? recipe.cuisineId.cuisineName : 'Uncategorized' %>
+                </div>
               </div>
-            <% }) %>
-          <% } else { %>
-            <div class="no-recipes-message">
-              <p>No recipes available yet. <a href="/recipes/new">Add the first recipe!</a></p>
+              <a href="/recipes/<%= recipe._id %>" class="view-recipe">View Recipe</a>
             </div>
-          <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="no-recipes-message">
+          <p>No recipes available yet. <a href="/recipes/new">Add the first recipe!</a></p>
         </div>
-      </div>
-    </section>
+      <% } %>
+    </div>
+  </div>
+</section>
+
 
     <!-- Footer -->
     <footer class="footer">

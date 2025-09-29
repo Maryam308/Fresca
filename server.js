@@ -50,12 +50,12 @@ app.use("/cuisines", cuisineController);
 // PUBLIC ROUTES
 app.get("/", async (req, res) => {
   try {
-    // Fetch 3 most recent recipes with populated author and cuisine data
+    // Fetch 4 most recent recipes with populated author and cuisine data
     const recentRecipes = await Recipe.find()
       .populate("authorId", "username")
       .populate("cuisineId", "cuisineName")
       .sort({ createdAt: -1 })
-      .limit(3);
+      .limit(4);
 
     res.render("index.ejs", {
       user: req.session.user,

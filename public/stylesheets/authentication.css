@@ -14,11 +14,12 @@
   align-items: center;
   padding: 60px 80px;
   background: linear-gradient(
-      135deg,
-      rgba(196, 165, 165, 0.05),
-      rgba(139, 125, 125, 0.05)
+      rgba(180, 164, 165, 0.8),
+      rgba(180, 164, 165, 0.8)
     ),
-    #b4a4a5;
+    url("/images/blueberryHeader.jpg");
+  background-size: cover;
+  background-position: center;
   text-align: center;
   width: 50vw;
 }

@@ -53,6 +53,7 @@ router.get("/", async (req, res) => {
       recipes,
       cuisines,
       currentUser: req.session.user || null,
+      page: "recipes",
     });
   } catch (error) {
     console.log(`Error fetching recipes: ${error}`);

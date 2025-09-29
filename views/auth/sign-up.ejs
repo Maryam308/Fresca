@@ -3,21 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
+    <title>Sign Up - Fresca</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/authentication.css" />
   </head>
   <body>
-    <h1>Create a new account!</h1>
-    <form action="/auth/sign-up" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" />
+    <!-- Page Header -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Join Fresca!</h1>
+          <p>Create a new account and start sharing recipes</p>
+        </div>
+      </div>
+    </section>
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
+    <!-- Sign Up Form -->
+    <section class="auth-section">
+      <div class="container">
+        <div class="auth-container">
+          <form action="/auth/sign-up" method="POST" class="auth-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" name="username" id="username" required />
+            </div>
 
-      <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" name="confirmPassword" id="confirmPassword" />
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" name="password" id="password" required />
+            </div>
 
-      <button type="submit">Sign up</button>
-    </form>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                required
+              />
+            </div>
+
+            <button type="submit" class="auth-btn">Create Account</button>
+          </form>
+
+          <div class="auth-footer">
+            <p>
+              Already have an account? <a href="/auth/sign-in">Sign in here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>

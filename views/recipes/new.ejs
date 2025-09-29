@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add New Recipe - Fresca</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/addEditRecipe.css" />
+    <script src="/scripts/script.js"></script>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
@@ -143,77 +145,5 @@
         <p>&copy; All rights reserved Fresca 2025</p>
       </div>
     </footer>
-
-    <script>
-      function addInput(type) {
-        const container = document.getElementById(type + "-container");
-
-        if (type === "ingredients") {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.name = "ingredients[]";
-          input.placeholder = "e.g., 2 tablespoons olive oil";
-          input.required = true;
-          container.appendChild(input);
-        } else if (type === "steps") {
-          const textarea = document.createElement("textarea");
-          textarea.name = "steps[]";
-          textarea.placeholder = "Describe the next step in detail...";
-          textarea.required = true;
-          container.appendChild(textarea);
-        }
-
-        // Add animation
-        const newElement = container.lastElementChild;
-        newElement.style.opacity = "0";
-        newElement.style.transform = "translateY(-10px)";
-
-        setTimeout(() => {
-          newElement.style.transition = "all 0.3s ease";
-          newElement.style.opacity = "1";
-          newElement.style.transform = "translateY(0)";
-        }, 10);
-      }
-
-      // Smooth scroll for back to top
-      document
-        .querySelector(".back-to-top")
-        .addEventListener("click", function (e) {
-          e.preventDefault();
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
-        });
-
-      // Form validation enhancements
-      document.querySelector("form").addEventListener("submit", function (e) {
-        const ingredients = document.querySelectorAll(
-          'input[name="ingredients[]"]'
-        );
-        const steps = document.querySelectorAll('textarea[name="steps[]"]');
-
-        if (ingredients.length === 0 || steps.length === 0) {
-          e.preventDefault();
-          alert("Please add at least one ingredient and one cooking step.");
-          return;
-        }
-
-        // Check if any ingredient or step is empty
-        let hasEmptyFields = false;
-        ingredients.forEach((input) => {
-          if (!input.value.trim()) hasEmptyFields = true;
-        });
-        steps.forEach((textarea) => {
-          if (!textarea.value.trim()) hasEmptyFields = true;
-        });
-
-        if (hasEmptyFields) {
-          e.preventDefault();
-          alert("Please fill in all ingredient and step fields.");
-          return;
-        }
-      });
-    </script>
   </body>
 </html>

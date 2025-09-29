@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fresca - Fresh Recipes That Inspire</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="/scripts/script.js"></script>
   </head>
   <body>
     <%- include('./partials/_navbar.ejs') %>
@@ -68,7 +69,10 @@
           <% if (recentRecipes && recentRecipes.length > 0) { %>
             <% recentRecipes.forEach(recipe => { %>
 <div class="recipe-card">
-<div class="recipe-image" style="background-image: url('<%= recipe.recipeImage || "/images/default-recipe.jpg" %>');"></div>
+<% const imageUrl = recipe.recipeImage || "/images/default-recipe.jpg"; %>
+<div class="recipe-image" style="background-image: url('<%= imageUrl %>');"></div>
+
+
   <div class="recipe-content">
                   <h3 class="recipe-title"><%= recipe.title %></h3>
                   <div class="recipe-meta">
@@ -98,16 +102,5 @@
         <p>&copy; All rights reserved Fresca 2025</p>
       </div>
     </footer>
-
-    <script>
-      // Smooth scroll for back to top
-      document.querySelector('.back-to-top').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
-    </script>
   </body>
 </html>

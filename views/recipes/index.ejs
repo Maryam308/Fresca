@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipes - Fresca</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script>
+      const currentUserId =
+        "<%= currentUser ? currentUser._id.toString() : '' %>";
+    </script>
+    <script src="/scripts/script.js"></script>
+
     <script src="/scripts/script.js"></script>
   </head>
   <body>

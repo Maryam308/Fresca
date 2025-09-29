@@ -1,7 +1,3 @@
-// Pass current user ID to JavaScript
-const currentUserId = '<%= currentUser ? currentUser._id : "" %>';
-
-// Category Filter Functionality
 document.addEventListener("DOMContentLoaded", function () {
   const filterBtns = document.querySelectorAll(".filter-btn");
   const toggleBtns = document.querySelectorAll(".toggle-option");
@@ -78,25 +74,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Run filter once on page load so toggles work immediately
+  filterRecipes();
+
   // Smooth scroll for back to top
-  document
-    .querySelector(".back-to-top")
-    .addEventListener("click", function (e) {
+  const backToTopBtn = document.querySelector(".back-to-top");
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener("click", function (e) {
       e.preventDefault();
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
     });
+  }
 });
 
 // Show/hide back to top button based on scroll
 window.addEventListener("scroll", function () {
   const backToTop = document.querySelector(".back-to-top");
-  if (window.pageYOffset > 300) {
-    backToTop.style.display = "flex";
-  } else {
-    backToTop.style.display = "none";
+  if (backToTop) {
+    if (window.pageYOffset > 300) {
+      backToTop.style.display = "flex";
+    } else {
+      backToTop.style.display = "none";
+    }
   }
 });
 
@@ -130,7 +132,7 @@ function addInput(type) {
   }, 10);
 }
 
-document.querySelector("form").addEventListener("submit", function (e) {
+document.querySelector("form")?.addEventListener("submit", function (e) {
   const ingredients = document.querySelectorAll('input[name="ingredients[]"]');
   const steps = document.querySelectorAll('textarea[name="steps[]"]');
 

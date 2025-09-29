@@ -8,7 +8,7 @@ Fresca is a full-stack recipe management app built using the MEN stack (MongoDB,
 
 ## 🚀 Getting Started
 
-- **Live App**: 
+- **Live App**: [Fresca WebApp](https://fresca-f810a52e1241.herokuapp.com/)
 - **Planning Materials**: [Wireframes , User Stories, & ERD](https://trello.com/invite/b/68cebea023f4bf4f9405abb5/ATTI9bf2448ffed11c9f6b973654c3014f2123445D6A/fresca-project-plan)
 
 ## 🛠 Technologies Used

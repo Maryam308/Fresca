@@ -8,39 +8,36 @@
     <link rel="stylesheet" href="/stylesheets/authentication.css" />
   </head>
   <body>
-    <!-- Page Header -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content">
-          <h1>Welcome Back!</h1>
-          <p>Sign in to your account to continue cooking</p>
-        </div>
-      </div>
-    </section>
-
     <!-- Sign In Form -->
     <section class="auth-section">
-      <div class="container">
-        <div class="auth-container">
-          <form action="/auth/sign-in" method="POST" class="auth-form">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" name="username" id="username" required />
-            </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" required />
-            </div>
-
-            <button type="submit" class="auth-btn">Sign In</button>
-          </form>
-
-          <div class="auth-footer">
-            <p>
-              Don't have an account? <a href="/auth/sign-up">Sign up here</a>
-            </p>
+      <!-- Hero Left -->
+      <div class="auth-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1>Welcome Back!</h1>
+            <p>Sign in to your account to continue cooking</p>
           </div>
+        </div>
+      </div>
+
+      <!-- Form Right -->
+      <div class="auth-container">
+        <form action="/auth/sign-in" method="POST" class="auth-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required />
+          </div>
+
+          <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="/auth/sign-up">Sign up here</a></p>
         </div>
       </div>
     </section>

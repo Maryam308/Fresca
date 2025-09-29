@@ -61,30 +61,61 @@ router.get("/", async (req, res) => {
 });
 
 // POST route to add a new recipe
-router.post("/", parser.single("recipeImage"), async (req, res) => {
-  try {
-    const { title, ingredients, steps, prepTime, cookTime, cuisineId } =
-      req.body;
+router.post("/", (req, res, next) => {
+  parser.single("recipeImage")(req, res, function (err) {
+    if (err) {
+      console.error("Upload error:", err);
 
-    const authorId = req.session.user._id;
+      // Multer file size limit error
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res.render("recipes/new.ejs", {
+          cuisines: [],
+          message: "File too large. Maximum allowed size is 20MB.",
+        });
+      }
 
-    const newRecipe = new Recipe({
-      title,
-      ingredients,
-      steps,
-      prepTime,
-      cookTime,
-      authorId,
-      cuisineId: cuisineId || null,
-      recipeImage: req.file ? req.file.path : null,
-    });
+      // Invalid file type
+      if (err.message && err.message.includes("Invalid file")) {
+        return res.render("recipes/new.ejs", {
+          cuisines: [],
+          message: "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
+        });
+      }
 
-    await newRecipe.save();
-    res.redirect(`/recipes/${newRecipe._id}`);
-  } catch (error) {
-    console.log(`Error creating recipe: ${error}`);
-    res.redirect("/recipes");
-  }
+      // Any other upload error
+      return res.render("recipes/new.ejs", {
+        cuisines: [],
+        message: "Error uploading file. Please try again.",
+      });
+    }
+
+    // Continue with normal recipe creation if no error
+    (async () => {
+      try {
+        const { title, ingredients, steps, prepTime, cookTime, cuisineId } =
+          req.body;
+
+        const authorId = req.session.user._id;
+
+        const newRecipe = new Recipe({
+          title,
+          ingredients,
+          steps,
+          prepTime,
+          cookTime,
+          authorId,
+          cuisineId: cuisineId || null,
+          recipeImage: req.file ? req.file.path : null,
+        });
+
+        await newRecipe.save();
+        res.redirect(`/recipes/${newRecipe._id}`);
+      } catch (error) {
+        console.log(`Error creating recipe: ${error}`);
+        res.redirect("/recipes");
+      }
+    })();
+  });
 });
 
 // Route to show edit form

@@ -157,3 +157,27 @@ document.querySelector("form")?.addEventListener("submit", function (e) {
     return;
   }
 });
+
+// Delete confirmation modal
+document.addEventListener("DOMContentLoaded", function () {
+  const deleteForms = document.querySelectorAll(".delete-form");
+
+  deleteForms.forEach((form) => {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // stop auto submit
+      const modal = document.getElementById("deleteModal");
+      modal.style.display = "flex";
+
+      // Confirm button
+      modal.querySelector("#confirmDelete").onclick = () => {
+        modal.style.display = "none";
+        form.submit();
+      };
+
+      // Cancel button
+      modal.querySelector("#cancelDelete").onclick = () => {
+        modal.style.display = "none";
+      };
+    });
+  });
+});

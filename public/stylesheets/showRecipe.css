@@ -16,28 +16,20 @@
   font-size: 1rem;
 }
 
-.btn-edit {
-  background: #8b7355;
-  color: white;
-}
-
-.btn-edit:hover {
-  background: #6b5940;
-  transform: translateY(-2px);
-}
-
+.btn-edit,
 .btn-delete {
-  background: #d4949b;
+  background: #958586;
   color: white;
 }
 
+.btn-edit:hover,
 .btn-delete:hover {
-  background: #c17882;
+  background: rgba(149, 133, 134, 0.8);
   transform: translateY(-2px);
 }
 
 .recipe-info-bar {
-  background: rgba(139, 115, 85, 0.8);
+  background: #b4a4a5;
   color: white;
   padding: 20px 0;
   margin: 40px 0;
@@ -91,7 +83,7 @@
 }
 
 .recipe-author-card {
-  background: rgba(139, 115, 85, 0.1);
+  background: rgba(180, 164, 165, 0.2);
   padding: 30px;
   border-radius: 15px;
   margin-top: 20px;
@@ -173,7 +165,7 @@
 }
 
 .instructions-title .highlight {
-  color: #d4949b;
+  color: #b4a4a5;
 }
 
 .instructions-list {
@@ -241,4 +233,46 @@
   .instructions-list li {
     padding-left: 50px;
   }
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #2c2c2c;
+}
+
+.modal-content p {
+  margin-bottom: 25px;
+  color: #555;
+  font-size: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }

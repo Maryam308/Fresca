@@ -1,9 +1,5 @@
 .page-header {
-  background: linear-gradient(
-    135deg,
-    rgba(180, 164, 165, 0.8),
-    rgba(140, 128, 129, 0.8)
-  );
+  background: #b4a4a5;
   padding: 60px 0;
   text-align: center;
   margin-bottom: 40px;
@@ -199,6 +195,7 @@
   margin-top: 5px;
   font-style: italic;
 }
+
 /* Remove Button for Dynamic Fields */
 .btn-remove {
   background: #dc3545;
@@ -210,18 +207,31 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 5px; /* was 10px → closer to field */
+  margin-top: 5px; /* was 15px → aligns better vertically */
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: top;
-  margin-top: 15px;
+  vertical-align: middle;
 }
 .btn-remove:hover {
   background: #c82333;
   transform: scale(1.1);
 }
+
+.ingredient-field,
+.step-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ingredient-field input,
+.step-field textarea {
+  flex: 1;
+}
+
 /* Delete Section */
 .delete-section {
   margin-top: 60px;

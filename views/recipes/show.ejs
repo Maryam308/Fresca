@@ -6,7 +6,7 @@
     <title><%= recipe.title %> - Fresca</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/showRecipe.css" />
-    <script src="scripts/script.js"></script>
+    <script src="/scripts/script.js"></script>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
@@ -26,7 +26,6 @@
               action="/recipes/<%= recipe._id %>?_method=DELETE"
               method="POST"
               class="delete-form"
-              onsubmit="return confirm('Are you sure you want to delete this recipe?')"
             >
               <button type="submit" class="btn btn-delete">Delete</button>
             </form>
@@ -123,5 +122,16 @@
 
     <!-- Back to Top Button -->
     <a href="#top" class="back-to-top">↑</a>
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete this recipe?</p>
+        <div class="modal-actions">
+          <button id="cancelDelete" class="btn btn-edit">Cancel</button>
+          <button id="confirmDelete" class="btn btn-delete">Delete</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

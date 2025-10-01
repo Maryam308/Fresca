@@ -41,7 +41,6 @@ router.post("/sign-up", async (req, res) => {
       res.redirect("/");
     });
   } catch (error) {
-    console.log(`Error during sign-up: ${error}`);
     res.send("An error occurred during registration. Please try again.");
   }
 });
@@ -74,7 +73,6 @@ router.post("/sign-in", async (req, res) => {
       res.redirect("/");
     });
   } catch (error) {
-    console.log(`Error during sign-in: ${error}`);
     res.send("An error occurred during login. Please try again.");
   }
 });

@@ -63,8 +63,7 @@ app.get("/", async (req, res) => {
       recentRecipes: recentRecipes,
     });
   } catch (error) {
-    console.error("Error fetching recent recipes:", error);
-    // Fallback: render with empty recipes array if there's an error
+    //  render with empty recipes array if there's an error
     res.render("index.ejs", {
       user: req.session.user,
       page: "home",
@@ -85,10 +84,4 @@ app.get("/recipes", (req, res) => {
     user: req.session.user,
     page: "recipes",
   });
-});
-
-// PROTECTED ROUTES (if needed)
-
-app.listen(PORT, () => {
-  console.log(`The express app is ready on port ${PORT}!`);
 });

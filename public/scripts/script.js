@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentTypeFilter = "all";
 
   function filterRecipes() {
+    // Only run if recipe cards exist on the page
+    if (recipeCards.length === 0) return;
+
     let visibleCount = 0;
 
     recipeCards.forEach((card) => {
@@ -42,37 +45,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const noRecipesMessage = document.getElementById("no-recipes-message");
     const noRecipesText = document.getElementById("no-recipes-text");
 
-    if (visibleCount === 0 && recipeCards.length > 0) {
-      noRecipesText.textContent = "No recipes available.";
-      noRecipesMessage.classList.remove("hidden");
-    } else {
-      noRecipesMessage.classList.add("hidden");
+    if (noRecipesMessage && noRecipesText) {
+      if (visibleCount === 0 && recipeCards.length > 0) {
+        noRecipesText.textContent = "No recipes available.";
+        noRecipesMessage.classList.remove("hidden");
+      } else {
+        noRecipesMessage.classList.add("hidden");
+      }
     }
   }
 
-  // Category filtering
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      // Remove active class from all buttons
-      filterBtns.forEach((b) => b.classList.remove("active"));
-      // Add active class to clicked button
-      this.classList.add("active");
+  // Category filtering - only attach if buttons exist
+  if (filterBtns.length > 0) {
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        // Remove active class from all buttons
+        filterBtns.forEach((b) => b.classList.remove("active"));
+        // Add active class to clicked button
+        this.classList.add("active");
 
-      currentCategoryFilter = this.dataset.category;
-      filterRecipes();
+        currentCategoryFilter = this.dataset.category;
+        filterRecipes();
+      });
     });
-  });
+  }
 
-  // Recipe type toggle
-  toggleBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      toggleBtns.forEach((b) => b.classList.remove("active"));
-      this.classList.add("active");
+  // Recipe type toggle - only attach if buttons exist
+  if (toggleBtns.length > 0) {
+    toggleBtns.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        toggleBtns.forEach((b) => b.classList.remove("active"));
+        this.classList.add("active");
 
-      currentTypeFilter = this.dataset.type;
-      filterRecipes();
+        currentTypeFilter = this.dataset.type;
+        filterRecipes();
+      });
     });
-  });
+  }
 
   // Run filter once on page load so toggles work immediately
   filterRecipes();
@@ -105,6 +114,9 @@ window.addEventListener("scroll", function () {
 function addInput(type) {
   const container = document.getElementById(type + "-container");
 
+  // Check if container exists
+  if (!container) return;
+
   if (type === "ingredients") {
     const input = document.createElement("input");
     input.type = "text";
@@ -132,63 +144,82 @@ function addInput(type) {
   }, 10);
 }
 
-document.querySelector("form")?.addEventListener("submit", function (e) {
-  const ingredients = document.querySelectorAll('input[name="ingredients[]"]');
-  const steps = document.querySelectorAll('textarea[name="steps[]"]');
+// Form validation - only attach if form exists
+const recipeForm = document.querySelector("form");
+if (recipeForm) {
+  recipeForm.addEventListener("submit", function (e) {
+    const ingredients = document.querySelectorAll(
+      'input[name="ingredients[]"]'
+    );
+    const steps = document.querySelectorAll('textarea[name="steps[]"]');
 
-  if (ingredients.length === 0 || steps.length === 0) {
-    e.preventDefault();
-    alert("Please add at least one ingredient and one cooking step.");
-    return;
-  }
+    if (ingredients.length === 0 || steps.length === 0) {
+      e.preventDefault();
+      alert("Please add at least one ingredient and one cooking step.");
+      return;
+    }
 
-  // Check if any ingredient or step is empty
-  let hasEmptyFields = false;
-  ingredients.forEach((input) => {
-    if (!input.value.trim()) hasEmptyFields = true;
+    // Check if any ingredient or step is empty
+    let hasEmptyFields = false;
+    ingredients.forEach((input) => {
+      if (!input.value.trim()) hasEmptyFields = true;
+    });
+    steps.forEach((textarea) => {
+      if (!textarea.value.trim()) hasEmptyFields = true;
+    });
+
+    if (hasEmptyFields) {
+      e.preventDefault();
+      alert("Please fill in all ingredient and step fields.");
+      return;
+    }
   });
-  steps.forEach((textarea) => {
-    if (!textarea.value.trim()) hasEmptyFields = true;
-  });
-
-  if (hasEmptyFields) {
-    e.preventDefault();
-    alert("Please fill in all ingredient and step fields.");
-    return;
-  }
-});
+}
 
 // Delete confirmation modal
 document.addEventListener("DOMContentLoaded", function () {
   const deleteForms = document.querySelectorAll(".delete-form");
 
-  deleteForms.forEach((form) => {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault(); // stop auto submit
-      const modal = document.getElementById("deleteModal");
-      modal.style.display = "flex";
+  if (deleteForms.length > 0) {
+    deleteForms.forEach((form) => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault(); // stop auto submit
+        const modal = document.getElementById("deleteModal");
 
-      // Confirm button
-      modal.querySelector("#confirmDelete").onclick = () => {
-        modal.style.display = "none";
-        form.submit();
-      };
+        if (!modal) return;
 
-      // Cancel button
-      modal.querySelector("#cancelDelete").onclick = () => {
-        modal.style.display = "none";
-      };
+        modal.style.display = "flex";
+
+        // Confirm button
+        const confirmBtn = modal.querySelector("#confirmDelete");
+        const cancelBtn = modal.querySelector("#cancelDelete");
+
+        if (confirmBtn) {
+          confirmBtn.onclick = () => {
+            modal.style.display = "none";
+            form.submit();
+          };
+        }
+
+        // Cancel button
+        if (cancelBtn) {
+          cancelBtn.onclick = () => {
+            modal.style.display = "none";
+          };
+        }
+      });
     });
-  });
+  }
 
-  // Smooth scroll for back to top
-  document
-    .querySelector(".back-to-top")
-    .addEventListener("click", function (e) {
+  // Smooth scroll for back to top (second instance)
+  const backToTopBtn = document.querySelector(".back-to-top");
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener("click", function (e) {
       e.preventDefault();
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
     });
+  }
 });

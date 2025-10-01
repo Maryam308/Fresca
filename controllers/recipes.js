@@ -29,11 +29,7 @@ router.get("/new", async (req, res) => {
 
     res.render("recipes/new.ejs", { cuisines, message: null });
   } catch (error) {
-    console.log(`Error fetching cuisines: ${error}`);
-    res.render("recipes/new.ejs", {
-      cuisines: null,
-      message: "Error fetching cuisines. Please try again later.",
-    });
+    res.send(`Error fetching cuisines: ${error}`);
   }
 });
 
@@ -56,8 +52,7 @@ router.get("/", async (req, res) => {
       page: "recipes",
     });
   } catch (error) {
-    console.log(`Error fetching recipes: ${error}`);
-    res.redirect("/");
+    res.send(`Error fetching recipes: ${error}`);
   }
 });
 
@@ -65,8 +60,6 @@ router.get("/", async (req, res) => {
 router.post("/", (req, res, next) => {
   parser.single("recipeImage")(req, res, function (err) {
     if (err) {
-      console.error("Upload error:", err);
-
       // Multer file size limit error
       if (err.code === "LIMIT_FILE_SIZE") {
         return res.render("recipes/new.ejs", {
@@ -112,8 +105,7 @@ router.post("/", (req, res, next) => {
         await newRecipe.save();
         res.redirect(`/recipes/${newRecipe._id}`);
       } catch (error) {
-        console.log(`Error creating recipe: ${error}`);
-        res.redirect("/recipes");
+        res.send(`Error creating recipe: ${error}`);
       }
     })();
   });
@@ -141,8 +133,7 @@ router.get("/:id/edit", async (req, res) => {
       message: null,
     });
   } catch (error) {
-    console.log(`Error fetching recipe for edit: ${error}`);
-    res.redirect("/recipes");
+    res.send(`Error fetching recipe for edit: ${error}`);
   }
 });
 
@@ -181,8 +172,7 @@ router.put("/:id", parser.single("recipeImage"), async (req, res) => {
     await Recipe.findByIdAndUpdate(req.params.id, updateData);
     res.redirect(`/recipes/${req.params.id}`);
   } catch (error) {
-    console.log(`Error updating recipe: ${error}`);
-    res.redirect("/recipes");
+    res.send(`Error updating recipe: ${error}`);
   }
 });
 
@@ -200,8 +190,7 @@ router.get("/:id", async (req, res) => {
       currentUser: req.session.user || null,
     });
   } catch (error) {
-    console.log(`Error fetching recipe: ${error}`);
-    res.redirect("/recipes");
+    res.send(`Error fetching recipe: ${error}`);
   }
 });
 
@@ -223,8 +212,7 @@ router.delete("/:id", async (req, res) => {
     await Recipe.findByIdAndDelete(req.params.id);
     res.redirect("/recipes");
   } catch (error) {
-    console.log(`Error deleting recipe: ${error}`);
-    res.redirect("/recipes");
+    res.send(`Error deleting recipe: ${error}`);
   }
 });
 

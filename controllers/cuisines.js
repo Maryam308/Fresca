@@ -15,8 +15,7 @@ router.get("/", isAdmin, async (req, res) => {
       page: "cuisines",
     });
   } catch (error) {
-    console.log(`Error fetching cuisines: ${error}`);
-    res.redirect("/");
+    res.send(`Error fetching cuisines: ${error}`);
   }
 });
 
@@ -39,8 +38,7 @@ router.post("/", isAdmin, async (req, res) => {
 
     res.redirect("/cuisines");
   } catch (error) {
-    console.log(`Error creating cuisine: ${error}`);
-    res.status(500).json({ error: "Failed to create cuisine" });
+    res.send(`Error creating cuisine: ${error}`);
   }
 });
 
@@ -63,8 +61,7 @@ router.put("/:id", isAdmin, async (req, res) => {
     await Cuisine.findByIdAndUpdate(id, { cuisineName: cuisineName.trim() });
     res.redirect("/cuisines");
   } catch (error) {
-    console.log(`Error updating cuisine: ${error}`);
-    res.status(500).json({ error: "Failed to update cuisine" });
+    res.send(`Error updating cuisine: ${error}`);
   }
 });
 
@@ -85,8 +82,7 @@ router.delete("/:id", isAdmin, async (req, res) => {
     await Cuisine.findByIdAndDelete(id);
     res.redirect("/cuisines");
   } catch (error) {
-    console.log(`Error deleting cuisine: ${error}`);
-    res.status(500).json({ error: "Failed to delete cuisine" });
+    res.send(`Error deleting cuisine: ${error}`);
   }
 });
 

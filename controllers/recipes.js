@@ -121,7 +121,7 @@ router.get("/:id/edit", async (req, res) => {
     if (
       !req.session.user ||
       (req.session.user._id.toString() !== recipe.authorId.toString() &&
-        !req.session.user.isAdmin)
+        req.session.user.role !== "admin")
     ) {
       return res.status(403).send("Access denied");
     }
@@ -147,7 +147,7 @@ router.put("/:id", parser.single("recipeImage"), async (req, res) => {
     if (
       !req.session.user ||
       (req.session.user._id.toString() !== recipe.authorId.toString() &&
-        !req.session.user.isAdmin)
+        req.session.user.role !== "admin")
     ) {
       return res.status(403).send("Access denied");
     }
@@ -204,7 +204,7 @@ router.delete("/:id", async (req, res) => {
     if (
       !req.session.user ||
       (req.session.user._id.toString() !== recipe.authorId.toString() &&
-        !req.session.user.isAdmin)
+        req.session.user.role !== "admin")
     ) {
       return res.status(403).send("Access denied");
     }

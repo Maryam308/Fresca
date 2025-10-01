@@ -17,7 +17,7 @@
 
           <!-- Show Edit/Delete buttons if user owns recipe or is admin -->
           <% if (currentUser && (currentUser._id.toString() ===
-          recipe.authorId._id.toString() || currentUser.isAdmin)) { %>
+          recipe.authorId._id.toString() || currentUser.role === 'admin')) { %>
           <div class="recipe-actions">
             <a href="/recipes/<%= recipe._id %>/edit" class="btn btn-edit"
               >Edit</a

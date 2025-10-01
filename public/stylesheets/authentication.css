@@ -1,3 +1,23 @@
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #fcc;
+}
+
+.field-error {
+  color: #c33;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.form-group.invalid input {
+  border-color: #c33;
+}
+
 .auth-section {
   display: flex;
   min-height: 100vh;

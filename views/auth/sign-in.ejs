@@ -6,6 +6,7 @@
     <title>Sign In - Fresca</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/authentication.css" />
+    <script defer src="/scripts/auth.js"></script>
   </head>
   <body>
     <!-- Sign In Form -->
@@ -22,15 +23,31 @@
 
       <!-- Form Right -->
       <div class="auth-container">
-        <form action="/auth/sign-in" method="POST" class="auth-form">
+        <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+        <% } %>
+
+        <form
+          action="/auth/sign-in"
+          method="POST"
+          class="auth-form"
+          id="signinForm"
+          novalidate
+        >
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" name="username" id="username" required />
+            <div class="field-error" id="usernameError">
+              Username is required
+            </div>
           </div>
 
           <div class="form-group">
             <label for="password">Password</label>
             <input type="password" name="password" id="password" required />
+            <div class="field-error" id="passwordError">
+              Password is required
+            </div>
           </div>
 
           <button type="submit" class="auth-btn">Sign In</button>

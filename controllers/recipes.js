@@ -10,7 +10,7 @@ const parser = multer({
   storage,
   limits: { fileSize: 20 * 1024 * 1024 },
 });
-
+//GET
 // Route to render "Add New Recipe" form
 router.get("/new", async (req, res) => {
   try {
@@ -79,6 +79,24 @@ router.get("/:id/edit", async (req, res) => {
     });
   } catch (error) {
     res.send(`Error fetching recipe for edit: ${error}`);
+  }
+});
+
+// Route to fetch a specific recipe (must be after /new and /:id/edit)
+router.get("/:id", async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id)
+      .populate("cuisineId")
+      .populate("authorId");
+    if (!recipe) return res.status(404).send("Recipe not found");
+
+    // Pass currentUser to the template for edit/delete permissions
+    res.render("recipes/show.ejs", {
+      recipe,
+      currentUser: req.session.user || null,
+    });
+  } catch (error) {
+    res.send(`Error fetching recipe: ${error}`);
   }
 });
 
@@ -201,24 +219,6 @@ router.put("/:id", parser.single("recipeImage"), async (req, res) => {
     res.redirect(`/recipes/${req.params.id}`);
   } catch (error) {
     res.send(`Error updating recipe: ${error}`);
-  }
-});
-
-// Route to fetch a specific recipe (must be after /new and /:id/edit)
-router.get("/:id", async (req, res) => {
-  try {
-    const recipe = await Recipe.findById(req.params.id)
-      .populate("cuisineId")
-      .populate("authorId");
-    if (!recipe) return res.status(404).send("Recipe not found");
-
-    // Pass currentUser to the template for edit/delete permissions
-    res.render("recipes/show.ejs", {
-      recipe,
-      currentUser: req.session.user || null,
-    });
-  } catch (error) {
-    res.send(`Error fetching recipe: ${error}`);
   }
 });
 

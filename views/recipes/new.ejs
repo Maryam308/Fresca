@@ -20,7 +20,6 @@
       </div>
     </section>
     <br />
-    <!-- Form Container -->
     <div class="container">
       <div class="form-container">
         <% if (message) { %>
@@ -28,7 +27,6 @@
         <% } %>
 
         <form action="/recipes" method="POST" enctype="multipart/form-data">
-          <!-- Recipe Title -->
           <div class="form-group">
             <label for="title">Recipe Title *</label>
             <input
@@ -40,7 +38,6 @@
             />
           </div>
 
-          <!-- Cuisine Selection -->
           <div class="form-group">
             <label for="cuisineId">Cuisine Category</label>
             <select id="cuisineId" name="cuisineId">
@@ -54,19 +51,17 @@
             </select>
           </div>
 
-          <!-- Recipe Image -->
           <div class="form-group">
             <label for="recipeImage">Recipe Image *</label>
             <input
               type="file"
               id="recipeImage"
               name="recipeImage"
-              accept="image/*"
+              accept=".png,.jpg,.jpeg"
               required
             />
           </div>
 
-          <!-- Prep and Cook Time Grid -->
           <div class="form-grid">
             <div class="form-group">
               <label for="prepTime">Prep Time (minutes) *</label>
@@ -93,16 +88,17 @@
             </div>
           </div>
 
-          <!-- Ingredients Section -->
           <div class="form-group">
             <label>Ingredients *</label>
             <div id="ingredients-container" class="ingredients-container">
-              <input
-                type="text"
-                name="ingredients[]"
-                placeholder="e.g., 1 cup all-purpose flour"
-                required
-              />
+              <div class="ingredient-field">
+                <input
+                  type="text"
+                  name="ingredients[]"
+                  placeholder="e.g., 1 cup all-purpose flour"
+                  required
+                />
+              </div>
             </div>
             <button
               type="button"
@@ -113,22 +109,22 @@
             </button>
           </div>
 
-          <!-- Steps Section -->
           <div class="form-group">
             <label>Cooking Steps *</label>
             <div id="steps-container" class="steps-container">
-              <textarea
-                name="steps[]"
-                placeholder="Describe the first step in detail..."
-                required
-              ></textarea>
+              <div class="step-field">
+                <textarea
+                  name="steps[]"
+                  placeholder="Describe the first step in detail..."
+                  required
+                ></textarea>
+              </div>
             </div>
             <button type="button" class="btn-add" onclick="addInput('steps')">
               Add another step
             </button>
           </div>
 
-          <!-- Form Actions -->
           <div class="form-actions">
             <a href="/recipes" class="btn-secondary">← Back to Recipes</a>
             <button type="submit" class="btn-submit">
@@ -139,7 +135,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <a href="#top" class="back-to-top">↑</a>

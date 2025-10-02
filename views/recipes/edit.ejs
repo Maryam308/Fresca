@@ -11,8 +11,7 @@
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-        <!-- Hero Section -->
-    <section class="hero">
+        <section class="hero">
       <div class="container">
         <div class="hero-content">
          <h1>Edit Recipe</h1>
@@ -21,11 +20,9 @@
       </div>
     </section>
     <br>
-    <!-- Form Container -->
     <div class="container">
       <div class="form-container">
         <form action="/recipes/<%= recipe._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-          <!-- Recipe Title -->
           <div class="form-group">
             <label for="title">Recipe Title *</label>
             <input 
@@ -38,7 +35,6 @@
             />
           </div>
 
-          <!-- Cuisine Selection -->
           <div class="form-group">
             <label for="cuisineId">Cuisine Category</label>
             <select id="cuisineId" name="cuisineId">
@@ -54,7 +50,6 @@
             </select>
           </div>
 
-          <!-- Current Recipe Image Display -->
           <% if (recipe.recipeImage) { %>
           <div class="form-group">
             <label>Current Recipe Image</label>
@@ -64,19 +59,17 @@
           </div>
           <% } %>
 
-          <!-- Recipe Image -->
           <div class="form-group">
             <label for="recipeImage">Update Recipe Image</label>
             <input
               type="file"
               id="recipeImage"
               name="recipeImage"
-              accept="image/*"
-            />
+              accept=".png,.jpg,.jpeg"
+              />
             <small class="form-help">Leave empty to keep current image</small>
           </div>
 
-          <!-- Prep and Cook Time Grid -->
           <div class="form-grid">
             <div class="form-group">
               <label for="prepTime">Prep Time (minutes) *</label>
@@ -105,7 +98,6 @@
             </div>
           </div>
 
-          <!-- Ingredients Section -->
           <div class="form-group">
             <label>Ingredients *</label>
             <div id="ingredients-container" class="ingredients-container">
@@ -123,12 +115,14 @@
 <% }) %>
 
               <% } else { %>
-                <input
-                  type="text"
-                  name="ingredients[]"
-                  placeholder="e.g., 1 cup all-purpose flour"
-                  required
-                />
+                <div class="ingredient-field">
+                  <input
+                    type="text"
+                    name="ingredients[]"
+                    placeholder="e.g., 1 cup all-purpose flour"
+                    required
+                  />
+                </div>
               <% } %>
             </div>
             <button type="button" class="btn-add" onclick="addInput('ingredients')">
@@ -136,7 +130,6 @@
             </button>
           </div>
 
-          <!-- Steps Section -->
           <div class="form-group">
             <label>Cooking Steps *</label>
             <div id="steps-container" class="steps-container">
@@ -152,11 +145,13 @@
 <% }) %>
 
               <% } else { %>
-                <textarea
-                  name="steps[]"
-                  placeholder="Describe the first step in detail..."
-                  required
-                ></textarea>
+                <div class="step-field">
+                  <textarea
+                    name="steps[]"
+                    placeholder="Describe the first step in detail..."
+                    required
+                  ></textarea>
+                </div>
               <% } %>
             </div>
             <button type="button" class="btn-add" onclick="addInput('steps')">
@@ -164,7 +159,6 @@
             </button>
           </div>
 
-          <!-- Form Actions -->
           <div class="form-actions">
             <a href="/recipes/<%= recipe._id %>" class="btn-secondary">← Cancel</a>
             <button type="submit" class="btn-submit">
@@ -175,137 +169,11 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <a href="#top" class="back-to-top">↑</a>
         <p>&copy; All rights reserved Fresca 2025</p>
       </div>
     </footer>
-
-    <script>
-      function addInput(type) {
-        const container = document.getElementById(type + "-container");
-        
-        if (type === "ingredients") {
-          const input = document.createElement("input");
-          input.type = "text";
-          input.name = "ingredients[]";
-          input.placeholder = "e.g., 2 tablespoons olive oil";
-          input.required = true;
-          container.appendChild(input);
-        } else if (type === "steps") {
-          const textarea = document.createElement("textarea");
-          textarea.name = "steps[]";
-          textarea.placeholder = "Describe the next step in detail...";
-          textarea.required = true;
-          container.appendChild(textarea);
-        }
-        
-        // Add animation
-        const newElement = container.lastElementChild;
-        newElement.style.opacity = "0";
-        newElement.style.transform = "translateY(-10px)";
-        
-        setTimeout(() => {
-          newElement.style.transition = "all 0.3s ease";
-          newElement.style.opacity = "1";
-          newElement.style.transform = "translateY(0)";
-        }, 10);
-      }
-
-      // Add remove functionality for existing fields
-      function addRemoveButtons() {
-        const ingredients = document.querySelectorAll('#ingredients-container input');
-        const steps = document.querySelectorAll('#steps-container textarea');
-        
-        // Add remove buttons to ingredients (except if only one)
-        ingredients.forEach((input, index) => {
-          if (ingredients.length > 1 && !input.nextElementSibling?.classList.contains('btn-remove')) {
-            const removeBtn = document.createElement('button');
-            removeBtn.type = 'button';
-            removeBtn.className = 'btn-remove';
-            removeBtn.textContent = '×';
-            removeBtn.onclick = () => removeInput(input);
-            input.parentNode.insertBefore(removeBtn, input.nextSibling);
-          }
-        });
-
-        // Add remove buttons to steps (except if only one)
-        steps.forEach((textarea, index) => {
-          if (steps.length > 1 && !textarea.nextElementSibling?.classList.contains('btn-remove')) {
-            const removeBtn = document.createElement('button');
-            removeBtn.type = 'button';
-            removeBtn.className = 'btn-remove';
-            removeBtn.textContent = '×';
-            removeBtn.onclick = () => removeInput(textarea);
-            textarea.parentNode.insertBefore(removeBtn, textarea.nextSibling);
-          }
-        });
-      }
-
-      function removeInput(element) {
-        const container = element.parentNode;
-        const removeBtn = element.nextElementSibling;
-        
-        // Animate out
-        element.style.transition = 'all 0.3s ease';
-        element.style.opacity = '0';
-        element.style.transform = 'translateX(-20px)';
-        
-        setTimeout(() => {
-          element.remove();
-          if (removeBtn && removeBtn.classList.contains('btn-remove')) {
-            removeBtn.remove();
-          }
-          addRemoveButtons(); // Refresh remove buttons
-        }, 300);
-      }
-
-      // Initialize remove buttons on page load
-      document.addEventListener('DOMContentLoaded', addRemoveButtons);
-
-      // Override the original addInput to include remove buttons
-      const originalAddInput = window.addInput;
-      window.addInput = function(type) {
-        originalAddInput(type);
-        setTimeout(addRemoveButtons, 100);
-      };
-
-      // Smooth scroll for back to top
-      document.querySelector('.back-to-top').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
-
-      // Form validation
-      document.querySelector('form').addEventListener('submit', function(e) {
-        const ingredients = document.querySelectorAll('input[name="ingredients[]"]');
-        const steps = document.querySelectorAll('textarea[name="steps[]"]');
-        
-        if (ingredients.length === 0 || steps.length === 0) {
-          e.preventDefault();
-          alert('Please add at least one ingredient and one cooking step.');
-          return;
-        }
-        
-        let hasEmptyFields = false;
-        ingredients.forEach(input => {
-          if (!input.value.trim()) hasEmptyFields = true;
-        });
-        steps.forEach(textarea => {
-          if (!textarea.value.trim()) hasEmptyFields = true;
-        });
-        
-        if (hasEmptyFields) {
-          e.preventDefault();
-          alert('Please fill in all ingredient and step fields.');
-          return;
-        }
-      });
-    </script>
   </body>
 </html>

@@ -54,7 +54,6 @@
 .form-group textarea {
   min-height: 100px;
   resize: vertical;
-  margin-bottom: 10px;
 }
 .form-group input[type="file"] {
   background: white;
@@ -74,19 +73,23 @@
 .steps-container {
   margin-bottom: 15px;
 }
-.ingredients-container input:not(:last-child),
-.steps-container textarea:not(:last-child) {
+
+/* New structure for ingredient/step fields */
+.ingredient-field,
+.step-field {
+  display: flex;
+  align-items: flex-start; /* Aligns content to the top */
   margin-bottom: 10px;
 }
-.ingredients-container input,
-.steps-container textarea {
-  margin-bottom: 10px;
-  position: relative;
+
+.ingredient-field input {
+  flex: 1;
 }
-.ingredients-container input:last-of-type,
-.steps-container textarea:last-of-type {
-  margin-bottom: 0;
+
+.step-field textarea {
+  flex: 1;
 }
+
 /* Add Button */
 .btn-add {
   background: linear-gradient(135deg, #e9ecef, #f8f9fa);
@@ -207,29 +210,17 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  margin-left: 5px; /* was 10px → closer to field */
-  margin-top: 5px; /* was 15px → aligns better vertically */
+  margin-left: 10px; /* Space between input/textarea and button */
+  flex-shrink: 0; /* Prevents the button from shrinking */
+  margin-top: 15px; /* Adjust to visually align with the center of the input/textarea */
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
 }
 .btn-remove:hover {
   background: #c82333;
   transform: scale(1.1);
-}
-
-.ingredient-field,
-.step-field {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.ingredient-field input,
-.step-field textarea {
-  flex: 1;
 }
 
 /* Delete Section */
@@ -274,11 +265,7 @@
 /* Responsive Design for Forms */
 @media (max-width: 768px) {
   .form-container {
-    margin: 0 20px 60px;
     padding: 30px 20px;
-  }
-  .page-header h1 {
-    font-size: 2.5rem;
   }
   .form-grid {
     grid-template-columns: 1fr;
@@ -288,40 +275,12 @@
     flex-direction: column;
     gap: 15px;
   }
+  .btn-secondary,
   .btn-submit {
     width: 100%;
+    text-align: center;
   }
-  .current-recipe-image {
-    max-width: 250px;
-    max-height: 150px;
-  }
-  .btn-remove {
-    margin-left: 5px;
-    margin-top: 10px;
-  }
-  .delete-section {
-    margin-top: 40px;
-    padding: 20px;
-  }
-}
-@media (max-width: 480px) {
-  .page-header {
-    padding: 40px 0;
-  }
-  .page-header h1 {
-    font-size: 2rem;
-  }
-  .form-container {
-    margin: 0 10px 40px;
-    padding: 20px 15px;
-  }
-  .current-recipe-image {
-    max-width: 200px;
-    max-height: 120px;
-  }
-  .btn-remove {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
+  .btn-submit {
+    margin-top: 20px;
   }
 }

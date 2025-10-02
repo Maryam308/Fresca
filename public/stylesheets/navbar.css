@@ -14,6 +14,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .nav-logo .logo-img {
@@ -66,6 +67,22 @@
   background-color: #b4a4a5;
 }
 
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-auth-mobile {
+  display: none;
+}
+
+.welcome-user {
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 .signup-btn {
   background: linear-gradient(135deg, #b4a4a5, #8b7d7d);
   color: white;
@@ -74,6 +91,16 @@
   border-radius: 25px;
   font-weight: 500;
   transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.admin-badge {
+  color: #b4a4a5;
+  font-size: 0.85rem;
+}
+
+.nav-item-auth {
+  display: none;
 }
 
 .signup-btn:hover {
@@ -87,6 +114,7 @@
   flex-direction: column;
   cursor: pointer;
   gap: 4px;
+  z-index: 1001;
 }
 
 .hamburger span {
@@ -98,22 +126,69 @@
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+
   .nav-menu {
     position: fixed;
-    left: -100%;
+    left: 0;
     top: 70px;
     flex-direction: column;
     background-color: white;
     width: 100%;
     text-align: center;
-    transition: 0.3s;
     box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-    padding: 20px 0;
-    gap: 20px;
+    padding: 0;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    z-index: 999;
   }
 
   .nav-menu.active {
-    left: 0;
+    max-height: 800px;
+    padding: 10px 0 20px 0;
+  }
+
+  .nav-item {
+    width: 100%;
+    padding: 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .nav-item-auth {
+    display: block;
+    border-top: 2px solid #e0e0e0;
+    background-color: #f9f9f9;
+    padding: 0 !important;
+  }
+
+  .nav-auth-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .nav-auth {
+    display: none; /* ✅ stays hidden on mobile */
+  }
+
+  .nav-link {
+    display: block;
+    padding: 18px 20px;
+    font-size: 1.05rem;
+    width: 100%;
+  }
+
+  .nav-link.active::after {
+    display: none;
   }
 
   .hamburger {
@@ -132,15 +207,45 @@
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  .nav-auth {
-    display: none;
+  .welcome-user {
+    text-align: center;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    display: block;
   }
 
-  .nav-menu.active ~ .nav-auth {
+  .admin-badge {
     display: block;
-    position: fixed;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-top: 5px;
+  }
+
+  .signup-btn {
+    width: calc(100% - 40px);
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+    padding: 14px 25px;
+    font-size: 1rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .nav-logo .logo-img {
+    height: 35px;
+  }
+
+  .welcome-user {
+    font-size: 0.9rem;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    padding: 16px 20px;
+  }
+
+  .signup-btn {
+    padding: 12px 20px;
   }
 }

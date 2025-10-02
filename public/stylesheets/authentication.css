@@ -157,6 +157,7 @@
     margin-top: 30px;
     padding: 40px 30px;
     width: 90%;
+    margin: 0 auto; /* ✅ center the form horizontally */
   }
 }
 

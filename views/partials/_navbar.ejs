@@ -6,6 +6,13 @@
         <img src="/images/logo.png" alt="Fresca" class="logo-img" />
       </a>
     </div>
+
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
     <ul class="nav-menu">
       <li class="nav-item">
         <a
@@ -40,6 +47,26 @@
         >
       </li>
       <% } %>
+
+      <!-- Auth buttons inside menu for mobile -->
+      <li class="nav-item nav-item-auth">
+        <div class="nav-auth-mobile">
+          <% if (typeof user !== 'undefined' && user) { %>
+          <!-- User is logged in - show user menu or logout -->
+          <span class="welcome-user"
+            >Welcome, <%= user.username || user.email %>! <% if (user.role ===
+            'admin') { %>
+            <span class="admin-badge">(Admin)</span>
+            <% } %>
+          </span>
+          <a href="/auth/sign-out" class="signup-btn">Logout</a>
+          <% } else { %>
+          <!-- User is NOT logged in - show sign up/sign in -->
+          <a href="/auth/sign-up" class="signup-btn">Sign Up</a>
+          <a href="/auth/sign-in" class="signup-btn">Sign In</a>
+          <% } %>
+        </div>
+      </li>
     </ul>
 
     <div class="nav-auth">
@@ -58,12 +85,6 @@
       <a href="/auth/sign-in" class="signup-btn">Sign In</a>
       <% } %>
     </div>
-
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
   </div>
 
   <script>
@@ -71,6 +92,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       const hamburger = document.querySelector(".hamburger");
       const navMenu = document.querySelector(".nav-menu");
+      const navAuth = document.querySelector(".nav-auth");
 
       hamburger.addEventListener("click", function () {
         hamburger.classList.toggle("active");
@@ -83,6 +105,15 @@
           navMenu.classList.remove("active");
         })
       );
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const isClickInsideNav = event.target.closest(".nav-container");
+        if (!isClickInsideNav && navMenu.classList.contains("active")) {
+          hamburger.classList.remove("active");
+          navMenu.classList.remove("active");
+        }
+      });
     });
   </script>
 </nav>

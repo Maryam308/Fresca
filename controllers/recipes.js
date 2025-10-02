@@ -56,61 +56,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST route to add a new recipe
-router.post("/", (req, res, next) => {
-  parser.single("recipeImage")(req, res, function (err) {
-    if (err) {
-      // Multer file size limit error
-      if (err.code === "LIMIT_FILE_SIZE") {
-        return res.render("recipes/new.ejs", {
-          cuisines: [],
-          message: "File too large. Maximum allowed size is 20MB.",
-        });
-      }
-
-      // Invalid file type
-      if (err.message && err.message.includes("Invalid file")) {
-        return res.render("recipes/new.ejs", {
-          cuisines: [],
-          message: "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
-        });
-      }
-
-      // Any other upload error
-      return res.render("recipes/new.ejs", {
-        cuisines: [],
-        message: "Error uploading file. Please try again.",
-      });
-    }
-
-    // Continue with normal recipe creation if no error
-    (async () => {
-      try {
-        const { title, ingredients, steps, prepTime, cookTime, cuisineId } =
-          req.body;
-
-        const authorId = req.session.user._id;
-
-        const newRecipe = new Recipe({
-          title,
-          ingredients,
-          steps,
-          prepTime,
-          cookTime,
-          authorId,
-          cuisineId: cuisineId || null,
-          recipeImage: req.file ? req.file.path : null,
-        });
-
-        await newRecipe.save();
-        res.redirect(`/recipes/${newRecipe._id}`);
-      } catch (error) {
-        res.send(`Error creating recipe: ${error}`);
-      }
-    })();
-  });
-});
-
 // Route to show edit form
 router.get("/:id/edit", async (req, res) => {
   try {
@@ -137,13 +82,79 @@ router.get("/:id/edit", async (req, res) => {
   }
 });
 
+// POST route to add a new recipe
+router.post("/", (req, res, next) => {
+  parser.single("recipeImage")(req, res, async function (err) {
+    try {
+      if (err) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          const cuisines = await Cuisine.find({});
+          return res.render("recipes/new.ejs", {
+            cuisines,
+            message: "File too large. Maximum allowed size is 20MB.",
+          });
+        }
+        if (err.message && err.message.includes("Invalid file")) {
+          const cuisines = await Cuisine.find({});
+          return res.render("recipes/new.ejs", {
+            cuisines,
+            message: "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
+          });
+        }
+        const cuisines = await Cuisine.find({});
+        return res.render("recipes/new.ejs", {
+          cuisines,
+          message: "Error uploading file. Please try again.",
+        });
+      }
+
+      const { title, ingredients, steps, prepTime, cookTime, cuisineId } =
+        req.body;
+
+      //  Server-side validation
+      if (
+        !title ||
+        !prepTime ||
+        !cookTime ||
+        !ingredients ||
+        ingredients.length === 0 ||
+        !steps ||
+        steps.length === 0
+      ) {
+        const cuisines = await Cuisine.find({});
+        return res.render("recipes/new.ejs", {
+          cuisines,
+          message: "All required fields must be filled.",
+        });
+      }
+
+      const authorId = req.session.user._id;
+
+      const newRecipe = new Recipe({
+        title,
+        ingredients,
+        steps,
+        prepTime,
+        cookTime,
+        authorId,
+        cuisineId: cuisineId || null,
+        recipeImage: req.file ? req.file.path : null,
+      });
+
+      await newRecipe.save();
+      res.redirect(`/recipes/${newRecipe._id}`);
+    } catch (error) {
+      res.send(`Error creating recipe: ${error}`);
+    }
+  });
+});
+
 // PUT route to update recipe
 router.put("/:id", parser.single("recipeImage"), async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);
     if (!recipe) return res.status(404).send("Recipe not found");
 
-    // Check if user owns recipe or is admin
     if (
       !req.session.user ||
       (req.session.user._id.toString() !== recipe.authorId.toString() &&
@@ -155,6 +166,24 @@ router.put("/:id", parser.single("recipeImage"), async (req, res) => {
     const { title, ingredients, steps, prepTime, cookTime, cuisineId } =
       req.body;
 
+    // Server-side validation
+    if (
+      !title ||
+      !prepTime ||
+      !cookTime ||
+      !ingredients ||
+      ingredients.length === 0 ||
+      !steps ||
+      steps.length === 0
+    ) {
+      const cuisines = await Cuisine.find({});
+      return res.render("recipes/edit.ejs", {
+        recipe,
+        cuisines,
+        message: "All required fields must be filled.",
+      });
+    }
+
     const updateData = {
       title,
       ingredients,
@@ -164,7 +193,6 @@ router.put("/:id", parser.single("recipeImage"), async (req, res) => {
       cuisineId: cuisineId || null,
     };
 
-    // Only update image if new one is uploaded
     if (req.file) {
       updateData.recipeImage = req.file.path;
     }

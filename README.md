@@ -2,7 +2,7 @@
 
 Fresca is a **full-stack recipe management app** built using the MEN stack (MongoDB, Express.js, Node.js). It allows users to browse, create, edit, and delete recipes in a clean and intuitive interface. Whether you're a home cook or a culinary explorer, Fresca helps you organize your favorite dishes and discover new ones.
 
-The goal of this project is to practice authentication, authorization, RESTful routing, and CRUD functionality within a well-designed UI.
+The goal of this project is to practice RESTful routing, and CRUD functionality within a well-designed UI.
 
 ---
 
@@ -45,6 +45,5 @@ The goal of this project is to practice authentication, authorization, RESTful r
 ## 🌱 Next Steps
 
 * Introduce private recipes & sharing features  
-* Enhance the design for a more modern UI/UX  
 * Add image upload for recipe preparation steps  
 * Introduce adding recipes to favorites  

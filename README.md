@@ -4,6 +4,17 @@ Fresca is a **full-stack recipe management app** built using the MEN stack (Mong
 
 The goal of this project is to practice RESTful routing, and CRUD functionality within a well-designed UI.
 
+
+## 🧪 Test Accounts (For Marking Purposes)
+
+### Admin Credentials
+- **Username:** admin  
+- **Password:** admin1234
+
+### Normal User Credentials
+- **Username:** huda  
+- **Password:** huda123
+
 ---
 
 ## 📸 Screenshot / Logo
